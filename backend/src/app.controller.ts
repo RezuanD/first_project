@@ -1,5 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Redirect } from '@nestjs/common';
+import { ApiOkResponse, ApiTags, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { AppService } from './app.service';
 
 @ApiTags('General')
@@ -22,4 +22,9 @@ export class AppController {
   getPing(): { message: string } {
     return this.appService.getPing();
   }
+
+  @Get()
+  @Redirect('/api')
+  @ApiExcludeEndpoint()
+  rootPage() {}
 }
