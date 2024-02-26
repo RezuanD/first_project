@@ -1,0 +1,16 @@
+.gitignore
+.vscode
+.idea
+
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+**/node_modules/
+**/.git
+**/README.md
+**/LICENSE
+**/.vscode
+**/npm-debug.log
+**/coverage
+**/dist
