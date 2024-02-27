@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { PingDto } from './dto/ping.dto';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  getPing(): PingDto {
+    return {
+      message: 'pong',
+    };
   }
 }
