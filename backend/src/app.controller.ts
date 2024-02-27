@@ -1,6 +1,7 @@
 import { Controller, Get, Redirect } from '@nestjs/common';
 import { ApiOkResponse, ApiTags, ApiExcludeEndpoint } from '@nestjs/swagger';
 import { AppService } from './app.service';
+import { PingDto } from './dto/ping.dto';
 
 @ApiTags('General')
 @Controller()
@@ -9,17 +10,10 @@ export class AppController {
 
   @Get('/ping')
   @ApiOkResponse({
-    content: {
-      'application/json': {
-        example: [
-          {
-            message: 'pong',
-          },
-        ],
-      },
-    },
+    description: 'Endpoint to check if api is up',
+    type: PingDto,
   })
-  getPing(): { message: string } {
+  getPing(): PingDto {
     return this.appService.getPing();
   }
 
