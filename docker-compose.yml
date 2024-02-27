@@ -32,9 +32,12 @@ services:
       - .env
     restart: always
     build: ./backend
+    volumes:
+      - ./backend/:/usr/src/app
     ports:
       - ${BACKEND_API_PORT}:${BACKEND_API_PORT}
-    command: [ "node", "dist/main" ]
+    command: yarn start:dev
  
 volumes:
   ft_postgres_data:
+  
