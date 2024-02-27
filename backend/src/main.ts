@@ -8,13 +8,13 @@ async function bootstrap() {
   const config = app.get(ConfigService);
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle(config.get('PROJECT_NAME'))
-    .setDescription(config.get('PROJECT_DESCRIPTION'))
-    .setVersion(config.get('PROJECT_VERSION'))
+    .setTitle(config.getOrThrow('PROJECT_NAME'))
+    .setDescription(config.getOrThrow('PROJECT_DESCRIPTION'))
+    .setVersion(config.getOrThrow('PROJECT_VERSION'))
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(+config.get('BACKEND_API_PORT'));
+  await app.listen(+config.getOrThrow('BACKEND_API_PORT'));
 }
 bootstrap();
