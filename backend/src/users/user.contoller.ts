@@ -1,8 +1,13 @@
-import { Body, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { Body, Get, Param, ParseUUIDPipe, Post, Delete } from '@nestjs/common';
 import { CreateUserDto, CreatedUser } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { Controller } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @Controller('users')
 @ApiTags('users')
@@ -21,5 +26,13 @@ export class UsersController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
   ) {
     return this.usersService.getUserById(userId);
+  }
+
+  @Delete(':id')
+  @ApiResponse({ status: 204, description: 'User successfully deleted' })
+  async deleteUser(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
+  ) {
+    return await this.usersService.deleteUser(userId);
   }
 }
