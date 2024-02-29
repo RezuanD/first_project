@@ -4,17 +4,20 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityNotFoundError, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from './user.entity';
 import { CreateUserDto, CreatedUser } from './dto/user.dto';
+import { UsersHelper } from './helpers/users.helpers';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly usersHelper: UsersHelper,
   ) {}
+
   saltOrRounds: number = 10;
 
   async create(user: CreateUserDto): Promise<CreatedUser> {
@@ -34,12 +37,20 @@ export class UsersService {
   }
 
   async getUserById(userId: string): Promise<User> {
-    try {
-      return await this.userRepository.findOneByOrFail({ id: userId });
-    } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        throw new NotFoundException();
-      }
-    }
+    const foundUser = await this.usersHelper.getUserById(
+      userId,
+      this.userRepository,
+    );
+
+    return foundUser;
+  }
+
+  async deleteUser(userId: string): Promise<boolean> {
+    const foundUser = await this.usersHelper.getUserById(
+      userId,
+      this.userRepository,
+    );
+    await foundUser.remove();
+    return true;
   }
 }
