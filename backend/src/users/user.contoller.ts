@@ -1,5 +1,13 @@
-import { Body, Get, Param, ParseUUIDPipe, Post, Delete } from '@nestjs/common';
-import { CreateUserDto, CreatedUser } from './dto/user.dto';
+import {
+  Body,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Delete,
+  Put,
+} from '@nestjs/common';
+import { CreateUserDto, CreatedUser, UpdateUserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { Controller } from '@nestjs/common';
 import {
@@ -34,5 +42,14 @@ export class UsersController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
   ) {
     return await this.usersService.deleteUser(userId);
+  }
+
+  @Put(':id')
+  @ApiOkResponse({ type: CreatedUser })
+  async updateUser(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.updateUser(userId, updateUserDto);
   }
 }
