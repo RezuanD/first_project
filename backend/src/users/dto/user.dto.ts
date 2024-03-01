@@ -39,3 +39,19 @@ export class CreatedUser extends PickType(User, [
   @IsDate()
   updatedAt: Date;
 }
+
+export class UpdateUserDto {
+  @ApiProperty()
+  @IsOptional()
+  avatar: string;
+
+  @ApiProperty()
+  @IsStrongPassword({
+    minLength: 8,
+    minUppercase: 0,
+    minNumbers: 0,
+    minSymbols: 0,
+  })
+  @IsOptional()
+  password: string;
+}
