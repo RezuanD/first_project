@@ -3,6 +3,7 @@ import {
   ConflictException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@/users/user.entity';
@@ -15,18 +16,19 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly usersHelper: UsersHelper,
+    private readonly configService: ConfigService,
   ) {}
 
-  saltOrRounds: number = 10;
+  private saltOrRounds: number =
+    +this.configService.getOrThrow('SALT_OR_ROUNDS');
 
   async createUser({
     username,
     email,
-    password,
-    avatar,
+    ...restUserData
   }: CreateUserDto): Promise<CreatedUser> {
     const foundUser = await this.userRepository.findOne({
-      where: [{ username }, { password }],
+      where: [{ username }, { email }],
     });
 
     if (!foundUser) {
@@ -34,15 +36,15 @@ export class UsersService {
     }
 
     const hashedPassword = await this.usersHelper.hashPassword(
-      password,
+      restUserData.password,
       this.saltOrRounds,
     );
 
     const createdUser = await this.userRepository.save({
       username,
       email,
-      avatar,
       password: hashedPassword,
+      ...restUserData,
     });
 
     const { password, avatar, ...restUser } = createdUser;
