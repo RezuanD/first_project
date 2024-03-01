@@ -25,7 +25,7 @@ export class UsersController {
   @Post()
   @ApiCreatedResponse({ type: CreatedUser })
   async createUser(@Body() createUserDto: CreateUserDto): Promise<CreatedUser> {
-    return await this.usersService.create(createUserDto);
+    return this.usersService.create(createUserDto);
   }
 
   @Get(':id')
@@ -41,7 +41,7 @@ export class UsersController {
   async deleteUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
   ) {
-    return await this.usersService.deleteUser(userId);
+    return this.usersService.deleteUser(userId);
   }
 
   @Put(':id')

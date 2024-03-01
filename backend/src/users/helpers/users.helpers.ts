@@ -21,6 +21,6 @@ export class UsersHelper {
     password: string,
     saltOrRounds: string | number,
   ): Promise<string> {
-    return await bcrypt.hash(password, saltOrRounds);
+    return bcrypt.hash(password, saltOrRounds);
   }
 }
