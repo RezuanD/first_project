@@ -25,15 +25,15 @@ export class UsersController {
   @Post()
   @ApiCreatedResponse({ type: CreatedUser })
   async createUser(@Body() createUserDto: CreateUserDto): Promise<CreatedUser> {
-    return this.usersService.create(createUserDto);
+    return this.usersService.createUser(createUserDto);
   }
 
   @Get(':id')
   @ApiOkResponse({ type: CreatedUser })
-  async getUserById(
+  async findUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
   ) {
-    return this.usersService.getUserById(userId);
+    return this.usersService.findUser(userId);
   }
 
   @Delete(':id')

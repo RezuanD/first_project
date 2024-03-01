@@ -19,7 +19,7 @@ export class UsersService {
 
   saltOrRounds: number = 10;
 
-  async create(user: CreateUserDto): Promise<CreatedUser> {
+  async createUser(user: CreateUserDto): Promise<CreatedUser> {
     if (
       (await this.userRepository.existsBy({ username: user.username })) ||
       (await this.userRepository.existsBy({ email: user.email }))
@@ -38,7 +38,7 @@ export class UsersService {
     return restUser;
   }
 
-  async getUserById(userId: string): Promise<User> {
+  async findUser(userId: string): Promise<User> {
     const foundUser = await this.usersHelper.getUserById(
       userId,
       this.userRepository,
