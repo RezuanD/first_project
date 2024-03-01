@@ -14,7 +14,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string) {
+  async validateUser(
+    username: string,
+    pass: string,
+  ): Promise<{ accessToken: string }> {
     const foundUser = await this.usersHelper.findUserByUsername(
       username,
       this.userRepository,
@@ -24,9 +27,11 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const { password, ...restUser } = foundUser;
+    const paylaod = { id: foundUser.id, username: foundUser.username };
 
-    return restUser;
+    return {
+      accessToken: await this.jwtService.signAsync(paylaod),
+    };
   }
 
   async login(user: User) {
