@@ -7,10 +7,10 @@ import { User } from '../user.entity';
 @Injectable()
 export class UsersHelper {
   async getUserById(
-    userId: string,
+    id: string,
     userRepository: Repository<User>,
   ): Promise<User> {
-    const foundUser = await userRepository.findOneBy({ id: userId });
+    const foundUser = await userRepository.findOneBy({ id });
     if (!foundUser) {
       throw new NotFoundException('User not found');
     }
