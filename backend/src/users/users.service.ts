@@ -1,13 +1,13 @@
 import {
   Injectable,
   ConflictException,
-  NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from './user.entity';
-import { CreateUserDto, CreatedUser } from './dto/user.dto';
+import { CreateUserDto, CreatedUser, UpdateUserDto } from './dto/user.dto';
 import { UsersHelper } from './helpers/users.helpers';
 
 @Injectable()
@@ -52,5 +52,22 @@ export class UsersService {
     );
     await foundUser.remove();
     return true;
+  }
+
+  async updateUser(userId: string, userUpdateDto: UpdateUserDto) {
+    if (Object.keys(userUpdateDto).length < 1) {
+      throw new UnprocessableEntityException();
+    }
+
+    if (userUpdateDto.password) {
+      userUpdateDto.password = await bcrypt.hash(
+        userUpdateDto.password,
+        this.saltOrRounds,
+      );
+    }
+
+    await this.userRepository.update(userId, userUpdateDto);
+
+    return this.usersHelper.getUserById(userId, this.userRepository);
   }
 }
