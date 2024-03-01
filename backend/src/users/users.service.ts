@@ -68,8 +68,15 @@ export class UsersService {
       );
     }
 
-    await this.userRepository.update(userId, userUpdateDto);
+    const foundUser = await this.usersHelper.getUserById(
+      userId,
+      this.userRepository,
+    );
 
-    return this.usersHelper.getUserById(userId, this.userRepository);
+    for (const fieldName of Object.keys(userUpdateDto)) {
+      foundUser[fieldName] = userUpdateDto[fieldName];
+    }
+
+    return foundUser.save();
   }
 }
