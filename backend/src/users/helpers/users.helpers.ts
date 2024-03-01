@@ -11,9 +11,11 @@ export class UsersHelper {
     userRepository: Repository<User>,
   ): Promise<User> {
     const foundUser = await userRepository.findOneBy({ id });
+
     if (!foundUser) {
       throw new NotFoundException('User not found');
     }
+
     return foundUser;
   }
 
