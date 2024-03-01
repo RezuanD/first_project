@@ -10,12 +10,7 @@ import {
 import { CreateUserDto, CreatedUser, UpdateUserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { Controller } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiResponse,
-} from '@nestjs/swagger';
+import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('users')
 @ApiTags('users')
@@ -37,7 +32,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @ApiResponse({ status: 204, description: 'User successfully deleted' })
+  @ApiOkResponse({ status: 204, description: 'User successfully deleted' })
   async deleteUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
   ) {
