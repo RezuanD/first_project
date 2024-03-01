@@ -19,22 +19,34 @@ export class UsersService {
 
   saltOrRounds: number = 10;
 
-  async createUser(user: CreateUserDto): Promise<CreatedUser> {
-    if (
-      (await this.userRepository.existsBy({ username: user.username })) ||
-      (await this.userRepository.existsBy({ email: user.email }))
-    ) {
+  async createUser({
+    username,
+    email,
+    password,
+    avatar,
+  }: CreateUserDto): Promise<CreatedUser> {
+    const foundUser = await this.userRepository.findOne({
+      where: [{ username }, { password }],
+    });
+
+    if (!foundUser) {
       throw new ConflictException('User with username or email already exists');
     }
+
     const hashedPassword = await this.usersHelper.hashPassword(
-      user.password,
+      password,
       this.saltOrRounds,
     );
+
     const createdUser = await this.userRepository.save({
-      ...user,
+      username,
+      email,
+      avatar,
       password: hashedPassword,
     });
+
     const { password, avatar, ...restUser } = createdUser;
+
     return restUser;
   }
 
@@ -52,7 +64,9 @@ export class UsersService {
       userId,
       this.userRepository,
     );
+
     await foundUser.remove();
+
     return true;
   }
 
