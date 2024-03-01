@@ -37,6 +37,24 @@ services:
     ports:
       - ${BACKEND_API_PORT}:${BACKEND_API_PORT}
     command: yarn start:dev
+
+  frontend:
+    container_name: ft_front
+    depends_on:
+      api:
+        condition: service_started
+    env_file:
+      - .env
+    environment:
+      - PORT=${FRONTEND_WEBAPP_PORT}
+      - HOSTNAME=${FRONTEND_WEBAPP_HOSTNAME}
+    restart: always
+    build: ./frontend
+    volumes:
+      - ./frontend:/usr/src/app
+    ports: 
+      - ${FRONTEND_WEBAPP_PORT}:${FRONTEND_WEBAPP_PORT}
+    command: yarn next dev
  
 volumes:
   ft_postgres_data:
