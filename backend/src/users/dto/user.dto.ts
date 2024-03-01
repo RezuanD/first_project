@@ -18,7 +18,7 @@ export class CreateUserDto extends PickType(User, ['username', 'email']) {
   })
   password: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'binary' })
   @IsString()
   @IsOptional()
   avatar: string;
@@ -41,7 +41,7 @@ export class CreatedUser extends PickType(User, [
 }
 
 export class UpdateUserDto {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'binary' })
   @IsOptional()
   avatar: string;
 
