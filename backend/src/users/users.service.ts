@@ -43,8 +43,8 @@ export class UserService {
     const createdUser = await this.userRepository.save({
       username,
       email,
-      password: hashedPassword,
       ...restUserData,
+      password: hashedPassword,
     });
 
     const { password, avatar, ...restUser } = createdUser;
