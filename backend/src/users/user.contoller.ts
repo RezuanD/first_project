@@ -14,12 +14,12 @@ import {
   CreatedUser,
   UpdateUserDto,
 } from '@/users/dto/user.dto';
-import { UsersService } from '@/users/users.service';
+import { UserService } from '@/users/users.service';
 
 @Controller('users')
 @ApiTags('users')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+export class UserController {
+  constructor(private readonly usersService: UserService) {}
 
   @Post()
   @ApiCreatedResponse({ type: CreatedUser })

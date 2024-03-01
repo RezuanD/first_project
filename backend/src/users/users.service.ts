@@ -11,7 +11,7 @@ import { CreateUserDto, CreatedUser, UpdateUserDto } from './dto/user.dto';
 import { UsersHelper } from './helpers/users.helpers';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
