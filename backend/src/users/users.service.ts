@@ -31,7 +31,7 @@ export class UserService {
       where: [{ username }, { email }],
     });
 
-    if (!foundUser) {
+    if (foundUser !== null) {
       throw new ConflictException('User with username or email already exists');
     }
 
@@ -57,7 +57,6 @@ export class UserService {
       userId,
       this.userRepository,
     );
-
     return foundUser;
   }
 
