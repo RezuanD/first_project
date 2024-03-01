@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { ExtendedBaseEntity } from 'src/common/entities/base.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import {
   IsEmail,
   IsString,
@@ -7,8 +8,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
+import { ExtendedBaseEntity } from 'src/common/entities/base.entity';
 
 @Entity()
 export class User extends ExtendedBaseEntity {

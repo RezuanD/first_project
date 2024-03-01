@@ -7,10 +7,14 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { CreateUserDto, CreatedUser, UpdateUserDto } from './dto/user.dto';
-import { UsersService } from './users.service';
 import { Controller } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import {
+  CreateUserDto,
+  CreatedUser,
+  UpdateUserDto,
+} from '@/users/dto/user.dto';
+import { UsersService } from '@/users/users.service';
 
 @Controller('users')
 @ApiTags('users')
