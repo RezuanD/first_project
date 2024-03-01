@@ -37,6 +37,5 @@ export class User extends ExtendedBaseEntity {
 
   @Column({ nullable: true })
   @ApiProperty()
-  @Exclude()
   avatar: string;
 }
