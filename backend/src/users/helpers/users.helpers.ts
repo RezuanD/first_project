@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { User } from '../user.entity';
 
 @Injectable()
@@ -14,5 +15,12 @@ export class UsersHelper {
       throw new NotFoundException('User not found');
     }
     return foundUser;
+  }
+
+  async hashPassword(
+    password: string,
+    saltOrRounds: string | number,
+  ): Promise<string> {
+    return await bcrypt.hash(password, saltOrRounds);
   }
 }

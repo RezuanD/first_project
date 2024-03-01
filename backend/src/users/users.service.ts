@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 import { User } from './user.entity';
 import { CreateUserDto, CreatedUser, UpdateUserDto } from './dto/user.dto';
 import { UsersHelper } from './helpers/users.helpers';
@@ -27,7 +26,10 @@ export class UsersService {
     ) {
       throw new ConflictException('User with username or email already exists');
     }
-    const hashedPassword = await bcrypt.hash(user.password, this.saltOrRounds);
+    const hashedPassword = await this.usersHelper.hashPassword(
+      user.password,
+      this.saltOrRounds,
+    );
     const createdUser = await this.userRepository.save({
       ...user,
       password: hashedPassword,
@@ -62,7 +64,7 @@ export class UsersService {
     }
 
     if (userUpdateDto.password) {
-      userUpdateDto.password = await bcrypt.hash(
+      userUpdateDto.password = await this.usersHelper.hashPassword(
         userUpdateDto.password,
         this.saltOrRounds,
       );
