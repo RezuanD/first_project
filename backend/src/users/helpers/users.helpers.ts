@@ -45,4 +45,16 @@ export class UsersHelper {
   ): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
   }
+
+  async updateAvatarPath(
+    username: string,
+    userRepository: Repository<User>,
+    filePath: string,
+  ) {
+    const foundUser = await this.findUserByUsername(username, userRepository);
+
+    foundUser['avatar'] = filePath;
+
+    await foundUser.save();
+  }
 }
