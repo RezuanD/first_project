@@ -20,7 +20,7 @@ export class AvatarsService {
   ): Promise<string> {
     const filePath = await this.avatarHelper.generateFilePath(
       username,
-      file.filename,
+      file.originalname,
     );
 
     await this.usersHelper.updateAvatarPath(

@@ -11,11 +11,14 @@ export class AvatarsHelper {
   }
 
   async saveFile(filePath: string, fileBuffer: Buffer) {
+    const directoryPath = filePath.substring(0, filePath.lastIndexOf('/'));
+
     try {
+      await fs.promises.mkdir(directoryPath, { recursive: true });
       await fs.promises.writeFile(filePath, fileBuffer);
     } catch (error) {
       console.log(error);
-      throw new Error('Failed to sava file');
+      throw new Error('Failed to save file');
     }
   }
 }
