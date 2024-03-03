@@ -12,6 +12,7 @@
     "baseUrl": "./",
     "paths": {
       "@/users/*": ["src/users/*"],
+      "@/auth/*": ["src/auth/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

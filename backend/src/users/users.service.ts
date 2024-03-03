@@ -31,7 +31,7 @@ export class UserService {
       where: [{ username }, { email }],
     });
 
-    if (!foundUser) {
+    if (foundUser !== null) {
       throw new ConflictException('User with username or email already exists');
     }
 
@@ -43,8 +43,8 @@ export class UserService {
     const createdUser = await this.userRepository.save({
       username,
       email,
-      password: hashedPassword,
       ...restUserData,
+      password: hashedPassword,
     });
 
     const { password, avatar, ...restUser } = createdUser;
@@ -57,7 +57,6 @@ export class UserService {
       userId,
       this.userRepository,
     );
-
     return foundUser;
   }
 

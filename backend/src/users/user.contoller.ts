@@ -6,9 +6,12 @@ import {
   Post,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { Request } from '@nestjs/common';
 import {
   CreateUserDto,
   CreatedUser,
@@ -35,20 +38,19 @@ export class UserController {
     return this.usersService.findUser(userId);
   }
 
-  @Delete(':id')
+  @Delete()
   @ApiOkResponse({ status: 204, description: 'User successfully deleted' })
-  async deleteUser(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
-  ) {
-    return this.usersService.deleteUser(userId);
+  @UseGuards(JwtAuthGuard)
+  async deleteUser(@Request() req) {
+    if (await this.usersService.deleteUser(req.userId)) {
+      return { message: 'User deleted successfully' };
+    }
   }
 
-  @Put(':id')
+  @Put()
   @ApiOkResponse({ type: CreatedUser })
-  async updateUser(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.usersService.updateUser(userId, updateUserDto);
+  @UseGuards(JwtAuthGuard)
+  async updateUser(@Request() req, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUser(req.userId, updateUserDto);
   }
 }
