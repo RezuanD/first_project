@@ -18,7 +18,7 @@ export class CreateUserDto extends PickType(User, ['username', 'email']) {
   })
   password: string;
 
-  @ApiProperty({ type: 'string', format: 'binary' })
+  @ApiProperty({ type: 'file' })
   @IsString()
   @IsOptional()
   avatar: string;

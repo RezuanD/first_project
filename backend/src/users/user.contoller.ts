@@ -8,21 +8,33 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { Controller } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { Controller, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
 import { Request } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import {
   CreateUserDto,
   CreatedUser,
   UpdateUserDto,
 } from '@/users/dto/user.dto';
-import { UserService } from '@/users/users.service';
+import { UserService } from '@/users/services/users.service';
+import { AvatarUploadDto } from './dto/avatar.dto';
+import { AvatarsService } from './services/avatar.service';
 
 @Controller('users')
 @ApiTags('users')
 export class UserController {
-  constructor(private readonly usersService: UserService) {}
+  constructor(
+    private readonly usersService: UserService,
+    private readonly avatarsService: AvatarsService,
+  ) {}
 
   @Post()
   @ApiCreatedResponse({ type: CreatedUser })
@@ -52,5 +64,21 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   async updateUser(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.updateUser(req.userId, updateUserDto);
+  }
+
+  @Put('/avatar')
+  @ApiOkResponse()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Set avatar for user',
+    type: AvatarUploadDto,
+  })
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async updateAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req,
+  ) {
+    return this.avatarsService.saveAvatar(req.user.username, file);
   }
 }
