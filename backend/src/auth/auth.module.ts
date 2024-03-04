@@ -11,6 +11,7 @@ import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
 import { UsersHelper } from '@/users/helpers/users.helpers';
 import { User } from '@/users/user.entity';
 import { UserModule } from '@/users/users.module';
+import { AuthHelper } from './auth.helper';
 
 @Module({
   imports: [
@@ -19,11 +20,11 @@ import { UserModule } from '@/users/users.module';
     UserModule,
     PassportModule,
     JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '1280s' },
+      secret: jwtConstants.JWT_ACCESS_SECRET,
+      signOptions: { expiresIn: jwtConstants.EXPIRATION_1_HOUR_CONSTANT },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, UsersHelper],
+  providers: [AuthService, LocalStrategy, JwtStrategy, UsersHelper, AuthHelper],
   controllers: [AuthController],
 })
 export class AuthModule {}
