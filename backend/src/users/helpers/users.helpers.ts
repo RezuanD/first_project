@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { User } from '../user.entity';
+import * as bcrypt from 'bcryptjs';
+import { User } from '@/users/user.entity';
 
 @Injectable()
 export class UsersHelper {
@@ -24,5 +24,37 @@ export class UsersHelper {
     saltOrRounds: string | number,
   ): Promise<string> {
     return bcrypt.hash(password, saltOrRounds);
+  }
+
+  async findUserByUsername(
+    username: string,
+    userRepository: Repository<User>,
+  ): Promise<User> {
+    const foundUser = await userRepository.findOneBy({ username });
+
+    if (!foundUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    return foundUser;
+  }
+
+  async validatePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return bcrypt.compare(password, hashedPassword);
+  }
+
+  async updateAvatarPath(
+    username: string,
+    userRepository: Repository<User>,
+    filePath: string,
+  ) {
+    const foundUser = await this.findUserByUsername(username, userRepository);
+
+    foundUser['avatar'] = filePath;
+
+    await foundUser.save();
   }
 }

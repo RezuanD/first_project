@@ -7,8 +7,8 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@/users/user.entity';
-import { CreateUserDto, CreatedUser, UpdateUserDto } from './dto/user.dto';
-import { UsersHelper } from './helpers/users.helpers';
+import { CreateUserDto, CreatedUser, UpdateUserDto } from '../dto/user.dto';
+import { UsersHelper } from '../helpers/users.helpers';
 
 @Injectable()
 export class UserService {
@@ -31,7 +31,7 @@ export class UserService {
       where: [{ username }, { email }],
     });
 
-    if (!foundUser) {
+    if (foundUser !== null) {
       throw new ConflictException('User with username or email already exists');
     }
 
@@ -43,11 +43,11 @@ export class UserService {
     const createdUser = await this.userRepository.save({
       username,
       email,
-      password: hashedPassword,
       ...restUserData,
+      password: hashedPassword,
     });
 
-    const { password, avatar, ...restUser } = createdUser;
+    const { password, ...restUser } = createdUser;
 
     return restUser;
   }
@@ -57,7 +57,6 @@ export class UserService {
       userId,
       this.userRepository,
     );
-
     return foundUser;
   }
 
