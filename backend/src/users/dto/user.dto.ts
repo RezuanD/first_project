@@ -17,11 +17,6 @@ export class CreateUserDto extends PickType(User, ['username', 'email']) {
     minSymbols: 0,
   })
   password: string;
-
-  @ApiProperty({ type: 'file' })
-  @IsString()
-  @IsOptional()
-  avatar: string;
 }
 
 export class CreatedUser extends PickType(User, [
@@ -41,10 +36,6 @@ export class CreatedUser extends PickType(User, [
 }
 
 export class UpdateUserDto {
-  @ApiProperty({ type: 'string', format: 'binary' })
-  @IsOptional()
-  avatar: string;
-
   @ApiProperty()
   @IsStrongPassword({
     minLength: 8,
