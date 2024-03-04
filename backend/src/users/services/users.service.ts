@@ -7,8 +7,8 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@/users/user.entity';
-import { CreateUserDto, CreatedUser, UpdateUserDto } from './dto/user.dto';
-import { UsersHelper } from './helpers/users.helpers';
+import { CreateUserDto, CreatedUser, UpdateUserDto } from '../dto/user.dto';
+import { UsersHelper } from '../helpers/users.helpers';
 
 @Injectable()
 export class UserService {
@@ -47,7 +47,7 @@ export class UserService {
       password: hashedPassword,
     });
 
-    const { password, avatar, ...restUser } = createdUser;
+    const { password, ...restUser } = createdUser;
 
     return restUser;
   }
