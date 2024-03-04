@@ -39,11 +39,20 @@ export class AuthController {
   })
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
-  async refrshToken(@Request() req, @Body() refresh_token: RefreshTokenDto) {
-    return this.authService.refreshToken(req.user);
+  async refrshToken(
+    @Request() req,
+    @Res({ passthrough: true }) response: Response,
+    @Body() refresh_token: RefreshTokenDto,
+  ) {
+    const tokens = await this.authService.refreshToken(req.user);
+    response.cookie('refresh_token', tokens.refresh_token);
+    return { access_token: tokens.access_token };
   }
 
-  @ApiOkResponse({ status: 204, description: 'Refresh token successfully deleted' })
+  @ApiOkResponse({
+    status: 204,
+    description: 'Refresh token successfully deleted',
+  })
   @UseGuards(JwtAuthGuard)
   @Delete('logout')
   async logout(@Res() response: Response) {
