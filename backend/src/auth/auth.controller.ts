@@ -5,6 +5,7 @@ import {
   Request,
   Res,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { AuthService } from '@/auth/auth.service';
 import { LocalAuthGuard } from '@/auth/guards/local-auth.guard';
@@ -12,6 +13,7 @@ import { Response } from 'express';
 import { RefreshTokenGuard } from './guards/refresh-jwt-auth.guard';
 import { AccessTokenDto, LoginDto, RefreshTokenDto } from './auth.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -39,5 +41,13 @@ export class AuthController {
   @Post('refresh')
   async refrshToken(@Request() req, @Body() refresh_token: RefreshTokenDto) {
     return this.authService.refreshToken(req.user);
+  }
+
+  @ApiOkResponse({ status: 204, description: 'Refresh token successfully deleted' })
+  @UseGuards(JwtAuthGuard)
+  @Delete('logout')
+  async logout(@Res() response: Response) {
+    response.clearCookie('refresh_token');
+    return { message: 'Refresh token successuly deleted' };
   }
 }
