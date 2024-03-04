@@ -47,7 +47,7 @@ export class UserService {
       password: hashedPassword,
     });
 
-    const { password, avatar, ...restUser } = createdUser;
+    const { password, ...restUser } = createdUser;
 
     return restUser;
   }
