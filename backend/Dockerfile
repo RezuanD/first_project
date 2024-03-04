@@ -3,7 +3,7 @@ FROM node:21.6.1-alpine AS builder
 WORKDIR /usr/src/app
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --verbose
 COPY . .
 
 RUN npm run build
@@ -17,8 +17,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
 COPY package*.json ./
-
-RUN npm install
+COPY --from=builder /usr/src/app/node_modules /usr/src/app/
 
 COPY . .
 COPY --from=builder /usr/src/app/dist ./dist
