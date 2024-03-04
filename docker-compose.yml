@@ -51,10 +51,12 @@ services:
     restart: always
     build: ./frontend
     volumes:
-      - ./frontend:/usr/src/app
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
     ports: 
       - ${FRONTEND_WEBAPP_PORT}:${FRONTEND_WEBAPP_PORT}
-    command: yarn next dev
+    command: yarn run dev
  
 volumes:
   ft_postgres_data:
