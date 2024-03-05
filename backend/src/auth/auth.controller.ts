@@ -2,10 +2,10 @@ import {
   Controller,
   Body,
   Post,
-  Request,
   Res,
   UseGuards,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -14,6 +14,7 @@ import { LocalAuthGuard } from '@/auth/guards/local-auth.guard';
 import { RefreshTokenGuard } from '@/auth/guards/refresh-jwt-auth.guard';
 import { AccessTokenDto, LoginDto, RefreshTokenDto } from '@/auth/auth.dto';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { RequestWithUser } from '@/auth/types';
 
 @Controller('auth')
 export class AuthController {
@@ -25,11 +26,11 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   async login(
-    @Request() req,
+    @Req() request: RequestWithUser,
     @Res({ passthrough: true }) response: Response,
     @Body() loginDto: LoginDto
   ) {
-    const tokens = await this.authService.login(req.user);
+    const tokens = await this.authService.login(request.user);
     response.cookie('refresh_token', tokens.refresh_token);
     return { access_token: tokens.access_token };
   }
@@ -40,11 +41,11 @@ export class AuthController {
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
   async refrshToken(
-    @Request() req,
+    @Req() request: RequestWithUser,
     @Res({ passthrough: true }) response: Response,
     @Body() refresh_token: RefreshTokenDto,
   ) {
-    const tokens = await this.authService.refreshToken(req.user);
+    const tokens = await this.authService.refreshToken(request.user);
     response.cookie('refresh_token', tokens.refresh_token);
     return { access_token: tokens.access_token };
   }
