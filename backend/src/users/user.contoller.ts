@@ -23,6 +23,7 @@ import {
   CreateUserDto,
   CreatedUser,
   UpdateUserDto,
+  RetriveUser,
 } from '@/users/dto/user.dto';
 import { UserService } from '@/users/services/users.service';
 import { AvatarUploadDto } from './dto/avatar.dto';
@@ -43,7 +44,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: CreatedUser })
+  @ApiOkResponse({ type: RetriveUser })
   async findUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
   ) {

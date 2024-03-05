@@ -35,6 +35,12 @@ export class CreatedUser extends PickType(User, [
   updatedAt: Date;
 }
 
+export class RetriveUser extends CreatedUser {
+  @ApiProperty()
+  @IsString()
+  avatar: string;
+}
+
 export class UpdateUserDto {
   @ApiProperty()
   @IsStrongPassword({
