@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TokensType } from '@/auth/types';
@@ -13,7 +12,6 @@ export class AuthService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly usersHelper: UsersHelper,
-    private readonly jwtService: JwtService,
     private readonly authHelper: AuthHelper,
   ) {}
 
