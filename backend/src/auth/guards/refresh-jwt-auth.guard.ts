@@ -9,7 +9,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
-import { jwtConstants } from '../constants';
+import { jwtConstants } from '@/auth/constants';
 
 @Injectable()
 class RefreshTokenGuard_ extends AuthGuard('jwt-refresh') {
