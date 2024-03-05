@@ -7,13 +7,13 @@ import {
   UseGuards,
   Delete,
 } from '@nestjs/common';
+import { ApiOkResponse } from '@nestjs/swagger';
+import { Response } from 'express';
 import { AuthService } from '@/auth/auth.service';
 import { LocalAuthGuard } from '@/auth/guards/local-auth.guard';
-import { Response } from 'express';
-import { RefreshTokenGuard } from './guards/refresh-jwt-auth.guard';
-import { AccessTokenDto, LoginDto, RefreshTokenDto } from './auth.dto';
-import { ApiOkResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RefreshTokenGuard } from '@/auth/guards/refresh-jwt-auth.guard';
+import { AccessTokenDto, LoginDto, RefreshTokenDto } from '@/auth/auth.dto';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
