@@ -1,7 +1,7 @@
 import { Controller, Get, Redirect } from '@nestjs/common';
 import { ApiOkResponse, ApiTags, ApiExcludeEndpoint } from '@nestjs/swagger';
-import { AppService } from './app.service';
-import { PingDto } from './dto/ping.dto';
+import { AppService } from '@/app.service';
+import { PingDto } from '@/dto/ping.dto';
 
 @ApiTags('General')
 @Controller()
