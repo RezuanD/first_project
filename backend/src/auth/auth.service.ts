@@ -23,7 +23,12 @@ export class AuthService {
       this.userRepository,
     );
 
-    if (!(await this.usersHelper.validatePassword(pass, foundUser.password))) {
+    const isPasswordValid = await this.usersHelper.validatePassword(
+      pass,
+      foundUser.password,
+    );
+
+    if (!isPasswordValid) {
       return null;
     }
 
