@@ -83,6 +83,7 @@ export class UserController {
       req.user.username,
       file,
     );
+
     return {
       imagePath: imagePath,
     };

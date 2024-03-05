@@ -24,7 +24,9 @@ export class AuthController {
     @Body() loginDto: LoginDto
   ) {
     const tokens = await this.authService.login(request.user);
+
     response.cookie('refresh_token', tokens.refresh_token, cookieOptions);
+
     return { access_token: tokens.access_token };
   }
 
@@ -39,7 +41,9 @@ export class AuthController {
     @Body() refresh_token: RefreshTokenDto,
   ) {
     const tokens = await this.authService.refreshToken(request.user);
+
     response.cookie('refresh_token', tokens.refresh_token, cookieOptions);
+
     return { access_token: tokens.access_token };
   }
 
@@ -50,6 +54,7 @@ export class AuthController {
   @Post('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('refresh_token');
+
     return { message: 'Refresh token successuly deleted' };
   }
 }
