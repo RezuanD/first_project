@@ -1,34 +1,34 @@
 import { Controller, Get, Post, Patch, Delete } from '@nestjs/common';
-import { BlogService } from '@/blog/blog.service';
+import { ArticleService } from '@/blog/article.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('blog')
 @ApiTags('blog')
-export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+export class ArticleController {
+  constructor(private readonly articleService: ArticleService) {}
 
   @Post()
   create() {
-    return this.blogService.create();
+    return this.articleService.create();
   }
 
   @Get()
   findAll() {
-    return this.blogService.findAll();
+    return this.articleService.findAll();
   }
 
   @Get()
   findOne() {
-    return this.blogService.findOne();
+    return this.articleService.findOne();
   }
 
   @Patch()
   update() {
-    return this.blogService.update();
+    return this.articleService.update();
   }
 
   @Delete()
   remove() {
-    return this.blogService.remove();
+    return this.articleService.remove();
   }
 }
