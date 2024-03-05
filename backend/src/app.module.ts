@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from '@/app.controller';
 import { AppService } from '@/app.service';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from '@/auth/auth.module';
 import { TypeOrmConfigService } from '@/config/database.config';
 import { UserModule } from '@/users/users.module';
 
