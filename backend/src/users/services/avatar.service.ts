@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '@/users/user.entity';
-import { UsersHelper } from '../helpers/users.helpers';
-import { AvatarsHelper } from '../helpers/avatar.helper';
 import { Repository } from 'typeorm';
+import { User } from '@/users/user.entity';
+import { UsersHelper } from '@/users/helpers/users.helpers';
+import { AvatarsHelper } from '@/users/helpers/avatar.helper';
 
 @Injectable()
 export class AvatarsService {

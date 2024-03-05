@@ -25,8 +25,8 @@ import {
   RetriveUser,
 } from '@/users/dto/user.dto';
 import { UserService } from '@/users/services/users.service';
-import { AvatarUploadDto } from './dto/avatar.dto';
-import { AvatarsService } from './services/avatar.service';
+import { AvatarUploadDto } from '@/users/dto/avatar.dto';
+import { AvatarsService } from '@/users/services/avatar.service';
 
 @Controller('users')
 @ApiTags('users')

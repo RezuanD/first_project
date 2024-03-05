@@ -1,8 +1,8 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { jwtConstants } from '../constants';
 import { Request } from 'express';
-import { PayloadType } from '../types';
+import { PayloadType } from '@/auth/types';
+import { jwtConstants } from '@/auth/constants';
 
 export class RefreshJwtStrategy extends PassportStrategy(
   Strategy,
