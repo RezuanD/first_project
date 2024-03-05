@@ -4,3 +4,7 @@ export const jwtConstants = {
   EXPIRATION_15_DAYS_CONSTANT: '15d',
   EXPIRATION_1_HOUR_CONSTANT: '3600s',
 };
+
+export const cookieConstants = {
+  cookieExpirationInSeconds: 864000,
+};

@@ -7,6 +7,7 @@ import { RefreshTokenGuard } from '@/auth/guards/refresh-jwt-auth.guard';
 import { AccessTokenDto, LoginDto, RefreshTokenDto } from '@/auth/auth.dto';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { RequestWithUser } from '@/auth/types';
+import { cookieOptions } from '@/auth/cookie.options';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +24,7 @@ export class AuthController {
     @Body() loginDto: LoginDto
   ) {
     const tokens = await this.authService.login(request.user);
-    response.cookie('refresh_token', tokens.refresh_token);
+    response.cookie('refresh_token', tokens.refresh_token, cookieOptions);
     return { access_token: tokens.access_token };
   }
 
@@ -38,7 +39,7 @@ export class AuthController {
     @Body() refresh_token: RefreshTokenDto,
   ) {
     const tokens = await this.authService.refreshToken(request.user);
-    response.cookie('refresh_token', tokens.refresh_token);
+    response.cookie('refresh_token', tokens.refresh_token, cookieOptions);
     return { access_token: tokens.access_token };
   }
 
