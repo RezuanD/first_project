@@ -3,6 +3,8 @@ import {
   ForbiddenException,
   Injectable,
   UnauthorizedException,
+  UseGuards,
+  applyDecorators,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
@@ -10,7 +12,7 @@ import { Observable } from 'rxjs';
 import { jwtConstants } from '../constants';
 
 @Injectable()
-export class RefreshTokenGuard extends AuthGuard('jwt-refresh') {
+class RefreshTokenGuard_ extends AuthGuard('jwt-refresh') {
   constructor(private jwtService: JwtService) {
     super();
   }
@@ -38,3 +40,6 @@ export class RefreshTokenGuard extends AuthGuard('jwt-refresh') {
     }
   }
 }
+
+export const RefreshTokenGuard = () =>
+  applyDecorators(UseGuards(RefreshTokenGuard_));

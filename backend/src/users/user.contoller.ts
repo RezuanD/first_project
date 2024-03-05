@@ -6,7 +6,6 @@ import {
   Post,
   Delete,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { Controller, UploadedFile, UseInterceptors } from '@nestjs/common';
 import {
@@ -53,7 +52,7 @@ export class UserController {
 
   @Delete()
   @ApiOkResponse({ status: 204, description: 'User successfully deleted' })
-  @UseGuards(JwtAuthGuard)
+  @JwtAuthGuard()
   async deleteUser(@Request() req) {
     if (await this.usersService.deleteUser(req.userId)) {
       return { message: 'User deleted successfully' };
@@ -62,7 +61,7 @@ export class UserController {
 
   @Put()
   @ApiOkResponse({ type: CreatedUser })
-  @UseGuards(JwtAuthGuard)
+  @JwtAuthGuard()
   async updateUser(@Request() req, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.updateUser(req.userId, updateUserDto);
   }
@@ -74,7 +73,7 @@ export class UserController {
     description: 'Set avatar for user',
     type: AvatarUploadDto,
   })
-  @UseGuards(JwtAuthGuard)
+  @JwtAuthGuard()
   @UseInterceptors(FileInterceptor('file'))
   async updateAvatar(
     @UploadedFile() file: Express.Multer.File,

@@ -3,13 +3,15 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
+  UseGuards,
+  applyDecorators,
 } from '@nestjs/common';
 import { TokenExpiredError, JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { jwtConstants } from '@/auth/constants';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+class AuthGuard_ implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -41,3 +43,5 @@ export class AuthGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 }
+
+export const AuthGuard = () => applyDecorators(UseGuards(AuthGuard_));

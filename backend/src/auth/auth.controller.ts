@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Body,
-  Post,
-  Res,
-  UseGuards,
-  Delete,
-  Req,
-} from '@nestjs/common';
+import { Controller, Body, Post, Res, Delete, Req } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthService } from '@/auth/auth.service';
@@ -24,7 +16,7 @@ export class AuthController {
     type: AccessTokenDto,
   })
   @Post('login')
-  @UseGuards(LocalAuthGuard)
+  @LocalAuthGuard()
   async login(
     @Req() request: RequestWithUser,
     @Res({ passthrough: true }) response: Response,
@@ -38,7 +30,7 @@ export class AuthController {
   @ApiOkResponse({
     type: AccessTokenDto,
   })
-  @UseGuards(RefreshTokenGuard)
+  @RefreshTokenGuard()
   @Post('refresh')
   async refrshToken(
     @Req() request: RequestWithUser,
@@ -54,7 +46,7 @@ export class AuthController {
     status: 204,
     description: 'Refresh token successfully deleted',
   })
-  @UseGuards(JwtAuthGuard)
+  @JwtAuthGuard()
   @Delete('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('refresh_token');
