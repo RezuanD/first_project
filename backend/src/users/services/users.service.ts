@@ -76,7 +76,7 @@ export class UserService {
   }
 
   async updateUser(userId: string, userUpdateDto: UpdateUserDto) {
-    if (Object.keys(userUpdateDto).length < 1) {
+    if (!Object.keys(userUpdateDto).length) {
       throw new UnprocessableEntityException(
         'At least one field must be presented',
       );
