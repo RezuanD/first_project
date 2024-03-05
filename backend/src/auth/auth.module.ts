@@ -24,7 +24,13 @@ import { UserModule } from '@/users/users.module';
       signOptions: { expiresIn: jwtConstants.EXPIRATION_1_HOUR_CONSTANT },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, UserHelpers, AuthHelpers],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    UserHelpers,
+    AuthHelpers,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

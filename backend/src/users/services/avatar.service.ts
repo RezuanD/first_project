@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { User } from '@/users/user.entity';
 import { UserHelpers } from '@/users/helpers/users.helpers';
 import { AvatarHelpers } from '@/users/helpers/avatar.helper';
@@ -9,7 +8,6 @@ import { AvatarHelpers } from '@/users/helpers/avatar.helper';
 export class AvatarService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
     private readonly userHelpers: UserHelpers,
     private readonly avatarHelpers: AvatarHelpers,
   ) {}
@@ -23,11 +21,7 @@ export class AvatarService {
       file.originalname,
     );
 
-    await this.userHelpers.updateAvatarPath(
-      username,
-      this.userRepository,
-      path,
-    );
+    await this.userHelpers.updateAvatarPath(username, path);
 
     await this.avatarHelpers.saveFile(path, file.buffer);
 

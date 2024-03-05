@@ -3,14 +3,17 @@ import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { User } from '@/users/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserHelpers {
-  async getUserById(
-    id: string,
-    userRepository: Repository<User>,
-  ): Promise<User> {
-    const foundUser = await userRepository.findOneBy({ id });
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
+
+  async getUserById(id: string): Promise<User> {
+    const foundUser = await this.userRepository.findOneBy({ id });
 
     if (!foundUser) {
       throw new NotFoundException('User not found');
@@ -26,11 +29,8 @@ export class UserHelpers {
     return bcrypt.hash(password, saltOrRounds);
   }
 
-  async findUserByUsername(
-    username: string,
-    userRepository: Repository<User>,
-  ): Promise<User> {
-    const foundUser = await userRepository.findOneBy({ username });
+  async findUserByUsername(username: string): Promise<User> {
+    const foundUser = await this.userRepository.findOneBy({ username });
 
     if (!foundUser) {
       throw new NotFoundException('User not found');
@@ -46,12 +46,8 @@ export class UserHelpers {
     return bcrypt.compare(password, hashedPassword);
   }
 
-  async updateAvatarPath(
-    username: string,
-    userRepository: Repository<User>,
-    filePath: string,
-  ) {
-    const foundUser = await this.findUserByUsername(username, userRepository);
+  async updateAvatarPath(username: string, filePath: string) {
+    const foundUser = await this.findUserByUsername(username);
 
     foundUser['avatar'] = filePath;
 
