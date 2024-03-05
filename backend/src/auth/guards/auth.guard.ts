@@ -11,7 +11,7 @@ import { TokenExpiredError, JwtService } from '@nestjs/jwt';
 import { Config } from '@/config/config';
 
 @Injectable()
-class AuthGuard_ implements CanActivate {
+class _AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -44,4 +44,4 @@ class AuthGuard_ implements CanActivate {
   }
 }
 
-export const AuthGuard = () => applyDecorators(UseGuards(AuthGuard_));
+export const AuthGuard = () => applyDecorators(UseGuards(_AuthGuard));
