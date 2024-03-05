@@ -15,7 +15,6 @@ import {
   ApiConsumes,
   ApiBody,
 } from '@nestjs/swagger';
-import { Request } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserPayload } from '@/auth/decorators';
@@ -28,7 +27,7 @@ import {
 import { UserService } from '@/users/services/users.service';
 import { AvatarUploadDto } from '@/users/dto/avatar.dto';
 import { AvatarService } from '@/users/services/avatar.service';
-import { User } from './user.entity';
+import { User } from '@/users/user.entity';
 
 @Controller('users')
 @ApiTags('users')
@@ -55,8 +54,8 @@ export class UserController {
   @Delete()
   @ApiOkResponse({ status: 204, description: 'User successfully deleted' })
   @JwtAuthGuard()
-  async deleteUser(@Request() req) {
-    if (await this.usersService.deleteUser(req.userId)) {
+  async deleteUser(@UserPayload() user: User) {
+    if (await this.usersService.deleteUser(user.id)) {
       return { message: 'User deleted successfully' };
     }
   }
@@ -64,8 +63,11 @@ export class UserController {
   @Put()
   @ApiOkResponse({ type: CreatedUser })
   @JwtAuthGuard()
-  async updateUser(@Request() req, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser(req.userId, updateUserDto);
+  async updateUser(
+    @UserPayload() user: User,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.updateUser(user.id, updateUserDto);
   }
 
   @Put('/avatar')
