@@ -4,12 +4,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AuthService } from '@/auth/auth.service';
-import { jwtConstants } from '@/auth/constants';
 import { LocalStrategy } from '@/auth/strategies/local.strategy';
 import { AuthController } from '@/auth/auth.controller';
 import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
 import { AuthHelpers } from '@/auth/auth.helper';
 import { UserHelpers } from '@/users/helpers/users.helpers';
+import { Config } from '@/config/config';
 import { User } from '@/users/user.entity';
 import { UserModule } from '@/users/users.module';
 
@@ -20,8 +20,8 @@ import { UserModule } from '@/users/users.module';
     UserModule,
     PassportModule,
     JwtModule.register({
-      secret: jwtConstants.JWT_ACCESS_SECRET,
-      signOptions: { expiresIn: jwtConstants.JWT_ACCESS_EXPIRATION },
+      secret: Config.JWT.JWT_ACCESS_SECRET,
+      signOptions: { expiresIn: Config.JWT.JWT_ACCESS_EXPIRATION },
     }),
   ],
   providers: [

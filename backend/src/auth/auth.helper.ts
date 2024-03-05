@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PayloadType, TokensType } from './types';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
+import { Config } from '@/config/config';
 
 @Injectable()
 export class AuthHelpers {
@@ -11,7 +11,7 @@ export class AuthHelpers {
     const [access_token, refresh_token] = await Promise.all([
       await this.jwtService.signAsync(payload),
       await this.jwtService.signAsync(payload, {
-        expiresIn: jwtConstants.JWT_REFRESH_EXPIRATION,
+        expiresIn: Config.JWT.JWT_REFRESH_EXPIRATION,
       }),
     ]);
     return {

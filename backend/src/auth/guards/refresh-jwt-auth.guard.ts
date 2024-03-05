@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
-import { jwtConstants } from '@/auth/constants';
+import { Config } from '@/config/config';
 
 @Injectable()
 class RefreshTokenGuard_ extends AuthGuard('jwt-refresh') {
@@ -26,7 +26,7 @@ class RefreshTokenGuard_ extends AuthGuard('jwt-refresh') {
       }
 
       const decoded = this.jwtService.verify(token, {
-        secret: jwtConstants.JWT_ACCESS_SECRET,
+        secret: Config.JWT.JWT_ACCESS_SECRET,
       });
 
       req.user = { ...decoded, refresh_token: token };

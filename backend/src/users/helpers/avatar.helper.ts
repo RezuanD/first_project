@@ -1,13 +1,11 @@
 import * as fs from 'fs';
 import { Injectable } from '@nestjs/common';
-import { MediaConfig } from 'src/config/media.config';
+import { Config } from '@/config/config';
 
 @Injectable()
 export class AvatarHelpers {
-  constructor(private readonly mediaConfig: MediaConfig) {}
-
   async generateFilePath(username: string, fileName: string): Promise<string> {
-    return `${this.mediaConfig.mediaPath}/avatars/${username}/${fileName}`;
+    return `${Config.Media.mediaPath}/avatars/${username}/${fileName}`;
   }
 
   async saveFile(path: string, buffer: Buffer) {

@@ -1,6 +1,3 @@
-import { Injectable } from '@nestjs/common';
-
-@Injectable()
-export class MediaConfig {
-  public readonly mediaPath: string = 'public/media';
-}
+export const mediaConfig = {
+  mediaPath: process.env.MEDIA_PATH || '/public/media',
+};

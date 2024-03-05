@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { TokenExpiredError, JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { jwtConstants } from '@/auth/constants';
+import { Config } from '@/config/config';
 
 @Injectable()
 class AuthGuard_ implements CanActivate {
@@ -24,7 +24,7 @@ class AuthGuard_ implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: jwtConstants.JWT_ACCESS_SECRET,
+        secret: Config.JWT.JWT_ACCESS_SECRET,
       });
       request['user'] = payload;
     } catch (err) {

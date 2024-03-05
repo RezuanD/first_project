@@ -6,8 +6,8 @@ import { LocalAuthGuard } from '@/auth/guards/local-auth.guard';
 import { RefreshTokenGuard } from '@/auth/guards/refresh-jwt-auth.guard';
 import { AccessTokenDto, LoginDto, RefreshTokenDto } from '@/auth/auth.dto';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
-import { cookieOptions } from '@/auth/cookie.options';
-import { UserPayload } from './decorators';
+import { UserPayload } from '@/auth/decorators';
+import { Config } from '@/config/config';
 import { User } from '@/users/user.entity';
 
 @Controller('auth')
@@ -26,7 +26,11 @@ export class AuthController {
   ) {
     const tokens = await this.authService.login(user);
 
-    response.cookie('refresh_token', tokens.refresh_token, cookieOptions);
+    response.cookie(
+      'refresh_token',
+      tokens.refresh_token,
+      Config.CookieOptions,
+    );
 
     return { access_token: tokens.access_token };
   }
@@ -43,7 +47,11 @@ export class AuthController {
   ) {
     const tokens = await this.authService.refreshToken(user);
 
-    response.cookie('refresh_token', tokens.refresh_token, cookieOptions);
+    response.cookie(
+      'refresh_token',
+      tokens.refresh_token,
+      Config.CookieOptions,
+    );
 
     return { access_token: tokens.access_token };
   }

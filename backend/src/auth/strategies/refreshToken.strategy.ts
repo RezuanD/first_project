@@ -2,7 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { PayloadType } from '@/auth/types';
-import { jwtConstants } from '@/auth/constants';
+import { Config } from '@/config/config';
 
 export class RefreshJwtStrategy extends PassportStrategy(
   Strategy,
@@ -14,7 +14,7 @@ export class RefreshJwtStrategy extends PassportStrategy(
         RefreshJwtStrategy.extractJWTFromCookie,
       ]),
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.JWT_REFRESH_SECRET,
+      secretOrKey: Config.JWT.JWT_REFRESH_SECRET,
     });
   }
 
