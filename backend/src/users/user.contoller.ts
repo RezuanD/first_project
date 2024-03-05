@@ -79,8 +79,12 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
     @Request() req,
   ): Promise<{ imagePath: string }> {
+    const imagePath = await this.avatarServices.saveAvatar(
+      req.user.username,
+      file,
+    );
     return {
-      imagePath: await this.avatarServices.saveAvatar(req.user.username, file),
+      imagePath: imagePath,
     };
   }
 }
