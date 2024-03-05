@@ -55,7 +55,6 @@ export class UserService {
   async findUser(userId: string): Promise<User> {
     const foundUser = await this.usersHelper.getUserById(
       userId,
-      this.userRepository,
     );
 
     return foundUser;
@@ -64,7 +63,6 @@ export class UserService {
   async deleteUser(userId: string): Promise<boolean> {
     const foundUser = await this.usersHelper.getUserById(
       userId,
-      this.userRepository,
     );
 
     await foundUser.remove();
@@ -88,7 +86,6 @@ export class UserService {
 
     const foundUser = await this.usersHelper.getUserById(
       userId,
-      this.userRepository,
     );
 
     for (const fieldName of Object.keys(userUpdateDto)) {
