@@ -33,7 +33,7 @@ export class AuthController {
   })
   @RefreshTokenGuard()
   @Post('refresh')
-  async refrshToken(
+  async refreshToken(
     @Req() request: RequestWithUser,
     @Res({ passthrough: true }) response: Response,
     @Body() refresh_token: RefreshTokenDto,
