@@ -8,10 +8,10 @@ import { jwtConstants } from '@/auth/constants';
 import { LocalStrategy } from '@/auth/strategies/local.strategy';
 import { AuthController } from '@/auth/auth.controller';
 import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
+import { AuthHelper } from '@/auth/auth.helper';
 import { UsersHelper } from '@/users/helpers/users.helpers';
 import { User } from '@/users/user.entity';
 import { UserModule } from '@/users/users.module';
-import { AuthHelper } from './auth.helper';
 
 @Module({
   imports: [
