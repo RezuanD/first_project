@@ -1,10 +1,13 @@
+import { resolve } from 'path';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TypeOrmConfigService } from './config/database.config';
-import { UserModule } from './users/users.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { AppController } from '@/app.controller';
+import { AppService } from '@/app.service';
+import { AuthModule } from './auth/auth.module';
+import { TypeOrmConfigService } from '@/config/database.config';
+import { UserModule } from '@/users/users.module';
 
 @Module({
   imports: [
@@ -13,7 +16,11 @@ import { UserModule } from './users/users.module';
       imports: [ConfigModule],
       useClass: TypeOrmConfigService,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: resolve(__dirname, '..', 'public'),
+    }),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

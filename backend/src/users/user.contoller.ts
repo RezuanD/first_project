@@ -7,19 +7,35 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { Controller } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { Controller, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { UserPayload } from '@/auth/decorators';
 import {
   CreateUserDto,
   CreatedUser,
   UpdateUserDto,
+  RetriveUser,
 } from '@/users/dto/user.dto';
-import { UserService } from '@/users/users.service';
+import { UserService } from '@/users/services/users.service';
+import { AvatarUploadDto } from '@/users/dto/avatar.dto';
+import { AvatarService } from '@/users/services/avatar.service';
+import { User } from '@/users/user.entity';
 
 @Controller('users')
 @ApiTags('users')
 export class UserController {
-  constructor(private readonly usersService: UserService) {}
+  constructor(
+    private readonly usersService: UserService,
+    private readonly avatarServices: AvatarService,
+  ) {}
 
   @Post()
   @ApiCreatedResponse({ type: CreatedUser })
@@ -28,27 +44,49 @@ export class UserController {
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: CreatedUser })
+  @ApiOkResponse({ type: RetriveUser })
   async findUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
   ) {
     return this.usersService.findUser(userId);
   }
 
-  @Delete(':id')
+  @Delete()
   @ApiOkResponse({ status: 204, description: 'User successfully deleted' })
-  async deleteUser(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
-  ) {
-    return this.usersService.deleteUser(userId);
+  @JwtAuthGuard()
+  async deleteUser(@UserPayload() user: User) {
+    if (await this.usersService.deleteUser(user.id)) {
+      return { message: 'User deleted successfully' };
+    }
   }
 
-  @Put(':id')
+  @Put()
   @ApiOkResponse({ type: CreatedUser })
+  @JwtAuthGuard()
   async updateUser(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
+    @UserPayload() user: User,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.updateUser(userId, updateUserDto);
+    return this.usersService.updateUser(user.id, updateUserDto);
+  }
+
+  @Put('/avatar')
+  @ApiOkResponse()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Set avatar for user',
+    type: AvatarUploadDto,
+  })
+  @JwtAuthGuard()
+  @UseInterceptors(FileInterceptor('file'))
+  async updateAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @UserPayload() user: User,
+  ): Promise<{ imagePath: string }> {
+    const imagePath = await this.avatarServices.saveAvatar(user.username, file);
+
+    return {
+      imagePath: imagePath,
+    };
   }
 }
