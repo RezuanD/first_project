@@ -18,6 +18,7 @@ import {
 import { Request } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { UserPayload } from '@/auth/decorators';
 import {
   CreateUserDto,
   CreatedUser,
@@ -27,6 +28,7 @@ import {
 import { UserService } from '@/users/services/users.service';
 import { AvatarUploadDto } from '@/users/dto/avatar.dto';
 import { AvatarService } from '@/users/services/avatar.service';
+import { User } from './user.entity';
 
 @Controller('users')
 @ApiTags('users')
@@ -77,12 +79,9 @@ export class UserController {
   @UseInterceptors(FileInterceptor('file'))
   async updateAvatar(
     @UploadedFile() file: Express.Multer.File,
-    @Request() req,
+    @UserPayload() user: User,
   ): Promise<{ imagePath: string }> {
-    const imagePath = await this.avatarServices.saveAvatar(
-      req.user.username,
-      file,
-    );
+    const imagePath = await this.avatarServices.saveAvatar(user.username, file);
 
     return {
       imagePath: imagePath,
