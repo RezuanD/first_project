@@ -6,7 +6,7 @@ import { UsersHelper } from '@/users/helpers/users.helpers';
 import { AvatarsHelper } from '@/users/helpers/avatar.helper';
 
 @Injectable()
-export class AvatarsService {
+export class AvatarService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
