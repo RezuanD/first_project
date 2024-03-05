@@ -5,7 +5,7 @@ import * as bcrypt from 'bcryptjs';
 import { User } from '@/users/user.entity';
 
 @Injectable()
-export class UsersHelper {
+export class UserHelpers {
   async getUserById(
     id: string,
     userRepository: Repository<User>,
