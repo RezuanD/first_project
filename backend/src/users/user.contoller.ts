@@ -88,5 +88,21 @@ export class UserController {
     return {
       imagePath: imagePath,
     };
+  
+  @Delete(':id')
+  @ApiOkResponse({ status: 204, description: 'User successfully deleted' })
+  async deleteUser(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
+  ) {
+    return this.usersService.deleteUser(userId);
+  }
+
+  @Put(':id')
+  @ApiOkResponse({ type: CreatedUser })
+  async updateUser(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) userId: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.updateUser(userId, updateUserDto);
   }
 }

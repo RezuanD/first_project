@@ -17,6 +17,11 @@ export class CreateUserDto extends PickType(User, ['username', 'email']) {
     minSymbols: 0,
   })
   password: string;
+
+  @ApiProperty({ type: 'string', format: 'binary' })
+  @IsString()
+  @IsOptional()
+  avatar: string;
 }
 
 export class CreatedUser extends PickType(User, [
