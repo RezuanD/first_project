@@ -8,8 +8,8 @@ import { jwtConstants } from '@/auth/constants';
 import { LocalStrategy } from '@/auth/strategies/local.strategy';
 import { AuthController } from '@/auth/auth.controller';
 import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
-import { AuthHelper } from '@/auth/auth.helper';
-import { UsersHelper } from '@/users/helpers/users.helpers';
+import { AuthHelpers } from '@/auth/auth.helper';
+import { UserHelpers } from '@/users/helpers/users.helpers';
 import { User } from '@/users/user.entity';
 import { UserModule } from '@/users/users.module';
 
@@ -24,7 +24,7 @@ import { UserModule } from '@/users/users.module';
       signOptions: { expiresIn: jwtConstants.EXPIRATION_1_HOUR_CONSTANT },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, UsersHelper, AuthHelper],
+  providers: [AuthService, LocalStrategy, JwtStrategy, UserHelpers, AuthHelpers],
   controllers: [AuthController],
 })
 export class AuthModule {}

@@ -26,14 +26,14 @@ import {
 } from '@/users/dto/user.dto';
 import { UserService } from '@/users/services/users.service';
 import { AvatarUploadDto } from '@/users/dto/avatar.dto';
-import { AvatarsService } from '@/users/services/avatar.service';
+import { AvatarService } from '@/users/services/avatar.service';
 
 @Controller('users')
 @ApiTags('users')
 export class UserController {
   constructor(
     private readonly usersService: UserService,
-    private readonly avatarsService: AvatarsService,
+    private readonly avatarServices: AvatarService,
   ) {}
 
   @Post()
@@ -80,7 +80,7 @@ export class UserController {
     @Request() req,
   ): Promise<{ imagePath: string }> {
     return {
-      imagePath: await this.avatarsService.saveAvatar(req.user.username, file),
+      imagePath: await this.avatarServices.saveAvatar(req.user.username, file),
     };
   }
 }

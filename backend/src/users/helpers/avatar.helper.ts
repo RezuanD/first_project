@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { MediaConfig } from 'src/config/media.config';
 
 @Injectable()
-export class AvatarsHelper {
+export class AvatarHelpers {
   constructor(private readonly mediaConfig: MediaConfig) {}
 
   async generateFilePath(username: string, fileName: string): Promise<string> {

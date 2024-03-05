@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 
 @Injectable()
-export class AuthHelper {
+export class AuthHelpers {
   constructor(private readonly jwtService: JwtService) {}
 
   async generateTokens(payload: PayloadType): Promise<TokensType> {

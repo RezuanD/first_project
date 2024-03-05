@@ -12,14 +12,14 @@ import {
   CreatedUser,
   UpdateUserDto,
 } from '@/users/dto/user.dto';
-import { UsersHelper } from '@/users/helpers/users.helpers';
+import { UserHelpers } from '@/users/helpers/users.helpers';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly usersHelper: UsersHelper,
+    private readonly userHelpers: UserHelpers,
     private readonly configService: ConfigService,
   ) {}
 
@@ -39,7 +39,7 @@ export class UserService {
       throw new ConflictException('User with username or email already exists');
     }
 
-    const hashedPassword = await this.usersHelper.hashPassword(
+    const hashedPassword = await this.userHelpers.hashPassword(
       restUserData.password,
       this.saltOrRounds,
     );
@@ -57,7 +57,7 @@ export class UserService {
   }
 
   async findUser(userId: string): Promise<User> {
-    const foundUser = await this.usersHelper.getUserById(
+    const foundUser = await this.userHelpers.getUserById(
       userId,
       this.userRepository,
     );
@@ -65,7 +65,7 @@ export class UserService {
   }
 
   async deleteUser(userId: string): Promise<boolean> {
-    const foundUser = await this.usersHelper.getUserById(
+    const foundUser = await this.userHelpers.getUserById(
       userId,
       this.userRepository,
     );
@@ -83,13 +83,13 @@ export class UserService {
     }
 
     if (userUpdateDto.password) {
-      userUpdateDto.password = await this.usersHelper.hashPassword(
+      userUpdateDto.password = await this.userHelpers.hashPassword(
         userUpdateDto.password,
         this.saltOrRounds,
       );
     }
 
-    const foundUser = await this.usersHelper.getUserById(
+    const foundUser = await this.userHelpers.getUserById(
       userId,
       this.userRepository,
     );
