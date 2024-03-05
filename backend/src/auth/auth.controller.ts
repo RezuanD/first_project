@@ -1,5 +1,5 @@
-import { Controller, Body, Post, Res, Delete, Req } from '@nestjs/common';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { Controller, Body, Post, Res, Req } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthService } from '@/auth/auth.service';
 import { LocalAuthGuard } from '@/auth/guards/local-auth.guard';
@@ -43,8 +43,7 @@ export class AuthController {
     return { access_token: tokens.access_token };
   }
 
-  @ApiOkResponse({
-    status: 204,
+  @ApiCreatedResponse({
     description: 'Refresh token successfully deleted',
   })
   @JwtAuthGuard()
