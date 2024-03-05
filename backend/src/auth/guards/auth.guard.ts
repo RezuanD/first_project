@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import {
   CanActivate,
   ExecutionContext,
@@ -7,7 +8,6 @@ import {
   applyDecorators,
 } from '@nestjs/common';
 import { TokenExpiredError, JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
 import { Config } from '@/config/config';
 
 @Injectable()

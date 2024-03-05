@@ -1,6 +1,6 @@
-import { jwtConfig } from './jwt.config';
-import { CookieConfig } from './cookie.config';
-import { mediaConfig } from './media.config';
+import { jwtConfig } from '@/config/jwt.config';
+import { CookieConfig } from '@/config/cookie.config';
+import { mediaConfig } from '@/config/media.config';
 
 export const Config = {
   JWT: jwtConfig,

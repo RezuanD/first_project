@@ -1,6 +1,6 @@
-import { User } from '@/users/user.entity';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsString, IsStrongPassword } from 'class-validator';
+import { User } from '@/users/user.entity';
 
 export class LoginDto extends PickType(User, ['username']) {
   @ApiProperty()

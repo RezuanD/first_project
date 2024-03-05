@@ -1,6 +1,6 @@
+import { Response } from 'express';
 import { Controller, Body, Post, Res } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { Response } from 'express';
 import { AuthService } from '@/auth/auth.service';
 import { LocalAuthGuard } from '@/auth/guards/local-auth.guard';
 import { RefreshTokenGuard } from '@/auth/guards/refresh-jwt-auth.guard';
