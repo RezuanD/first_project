@@ -48,7 +48,7 @@ export class AuthController {
     description: 'Refresh token successfully deleted',
   })
   @JwtAuthGuard()
-  @Delete('logout')
+  @Post('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('refresh_token');
     return { message: 'Refresh token successuly deleted' };
