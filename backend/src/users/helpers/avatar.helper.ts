@@ -10,12 +10,12 @@ export class AvatarsHelper {
     return `${this.mediaConfig.mediaPath}/avatars/${username}/${fileName}`;
   }
 
-  async saveFile(filePath: string, fileBuffer: Buffer) {
-    const directoryPath = filePath.substring(0, filePath.lastIndexOf('/'));
+  async saveFile(path: string, buffer: Buffer) {
+    const directoryPath = path.substring(0, path.lastIndexOf('/'));
 
     try {
       await fs.promises.mkdir(directoryPath, { recursive: true });
-      await fs.promises.writeFile(filePath, fileBuffer);
+      await fs.promises.writeFile(path, buffer);
     } catch (error) {
       console.log(error);
       throw new Error('Failed to save file');

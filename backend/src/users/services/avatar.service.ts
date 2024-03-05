@@ -18,7 +18,7 @@ export class AvatarsService {
     username: string,
     file: Express.Multer.File,
   ): Promise<string> {
-    const filePath = await this.avatarHelper.generateFilePath(
+    const path = await this.avatarHelper.generateFilePath(
       username,
       file.originalname,
     );
@@ -26,11 +26,11 @@ export class AvatarsService {
     await this.usersHelper.updateAvatarPath(
       username,
       this.userRepository,
-      filePath,
+      path,
     );
 
-    await this.avatarHelper.saveFile(filePath, file.buffer);
+    await this.avatarHelper.saveFile(path, file.buffer);
 
-    return filePath;
+    return path;
   }
 }
