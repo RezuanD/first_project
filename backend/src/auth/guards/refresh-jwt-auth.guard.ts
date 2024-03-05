@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
-import { Observable } from 'rxjs';
 import { jwtConstants } from '@/auth/constants';
 
 @Injectable()
@@ -17,9 +16,7 @@ class RefreshTokenGuard_ extends AuthGuard('jwt-refresh') {
     super();
   }
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext) {
     try {
       const req = context.switchToHttp().getRequest();
       const token = req.cookies.refresh_token;
