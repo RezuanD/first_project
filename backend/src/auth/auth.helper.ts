@@ -11,7 +11,7 @@ export class AuthHelpers {
     const [access_token, refresh_token] = await Promise.all([
       await this.jwtService.signAsync(payload),
       await this.jwtService.signAsync(payload, {
-        expiresIn: jwtConstants.EXPIRATION_15_DAYS_CONSTANT,
+        expiresIn: jwtConstants.JWT_REFRESH_EXPIRATION,
       }),
     ]);
     return {
