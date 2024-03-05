@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
@@ -8,7 +8,8 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ExtendedBaseEntity } from 'src/common/entities/base.entity';
+import { ExtendedBaseEntity } from '@/common/entities/base.entity';
+import { Article } from '@/blog/entities/article.entity';
 
 @Entity()
 export class User extends ExtendedBaseEntity {
@@ -38,4 +39,7 @@ export class User extends ExtendedBaseEntity {
   @Column({ nullable: true })
   @ApiProperty()
   avatar: string;
+
+  @OneToMany(() => Article, (article) => article.author)
+  articles: Article[];
 }
