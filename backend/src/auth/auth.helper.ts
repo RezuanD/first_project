@@ -8,11 +8,15 @@ export class AuthHelper {
   constructor(private readonly jwtService: JwtService) {}
 
   async generateTokens(payload: PayloadType): Promise<TokensType> {
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-      refresh_token: await this.jwtService.signAsync(payload, {
+    const [access_token, refresh_token] = await Promise.all([
+      await this.jwtService.signAsync(payload),
+      await this.jwtService.signAsync(payload, {
         expiresIn: jwtConstants.EXPIRATION_15_DAYS_CONSTANT,
       }),
+    ]);
+    return {
+      access_token: access_token,
+      refresh_token: refresh_token,
     };
   }
 }
