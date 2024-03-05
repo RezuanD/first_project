@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 import { TypeOrmConfigService } from './config/database.config';
 import { UserModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { join } from 'path';
+import { resolve } from 'path';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { join } from 'path';
       useClass: TypeOrmConfigService,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: resolve(__dirname, '..', 'public'),
     }),
     UserModule,
     AuthModule,
