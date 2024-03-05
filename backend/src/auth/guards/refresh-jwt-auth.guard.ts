@@ -11,7 +11,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Config } from '@/config/config';
 
 @Injectable()
-class RefreshTokenGuard_ extends AuthGuard('jwt-refresh') {
+class _RefreshTokenGuard extends AuthGuard('jwt-refresh') {
   constructor(private jwtService: JwtService) {
     super();
   }
@@ -39,4 +39,4 @@ class RefreshTokenGuard_ extends AuthGuard('jwt-refresh') {
 }
 
 export const RefreshTokenGuard = () =>
-  applyDecorators(UseGuards(RefreshTokenGuard_));
+  applyDecorators(UseGuards(_RefreshTokenGuard));
