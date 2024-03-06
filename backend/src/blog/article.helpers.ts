@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreatedArticleDto } from './dto/article.dto';
-import { Article } from './entities/article.entity';
+import { Article } from '@/blog/entities/article.entity';
 
 @Injectable()
 export class ArticleHelpers {
