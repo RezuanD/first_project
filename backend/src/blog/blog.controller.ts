@@ -1,9 +1,18 @@
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Get, Post, Patch, Delete } from '@nestjs/common';
+import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  ParseUUIDPipe,
+  Param,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserPayload } from '@/auth/decorators';
 import { ArticleService } from '@/blog/article.service';
-import { ArticleCreateDto, ArticleCreatedDto } from '@/blog/dto/article.dto';
+import { ArticleCreateDto, CreatedArticleDto } from '@/blog/dto/article.dto';
 import { User } from '@/users/user.entity';
 
 @Controller('blog/articles')
@@ -12,7 +21,7 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post()
-  @ApiCreatedResponse({ type: ArticleCreatedDto })
+  @ApiCreatedResponse({ type: CreatedArticleDto })
   @JwtAuthGuard()
   async createArticle(
     @UserPayload() author: User,
@@ -26,9 +35,12 @@ export class ArticleController {
     return this.articleService.findAll();
   }
 
-  @Get()
-  findOne() {
-    return this.articleService.findOne();
+  @Get(':id')
+  @ApiResponse({ type: CreatedArticleDto })
+  async findArticle(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) articleId: string,
+  ) {
+    return this.articleService.findArticle(articleId);
   }
 
   @Patch()
