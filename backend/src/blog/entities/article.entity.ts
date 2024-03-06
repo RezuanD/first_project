@@ -18,7 +18,7 @@ export class Article extends ExtendedBaseEntity {
   @MaxLength(128)
   title: string;
 
-  @Column()
+  @Column({ type: 'text' })
   @ApiProperty()
   @IsString()
   text: string;
