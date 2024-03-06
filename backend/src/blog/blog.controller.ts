@@ -13,7 +13,7 @@ import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserPayload } from '@/auth/decorators';
 import { ArticleService } from '@/blog/article.service';
 import { ArticleCreateDto, CreatedArticleDto } from '@/blog/dto/article.dto';
-import { User } from '@/users/user.entity';
+import { RequestUserPayload } from '@/users/types';
 
 @Controller('blog/articles')
 @ApiTags('articles')
@@ -24,7 +24,7 @@ export class ArticleController {
   @ApiCreatedResponse({ type: CreatedArticleDto })
   @JwtAuthGuard()
   async createArticle(
-    @UserPayload() author: User,
+    @UserPayload() author: RequestUserPayload,
     @Body() articleCreateDto: ArticleCreateDto,
   ) {
     return this.articleService.createArticle(articleCreateDto, author);

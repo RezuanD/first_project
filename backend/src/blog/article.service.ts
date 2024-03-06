@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 import { Article } from '@/blog/entities/article.entity';
 import { ArticleCreateDto, CreatedArticleDto } from '@/blog/dto/article.dto';
 import { ArticleHelpers } from '@/blog/article.helpers';
-import { User } from '@/users/user.entity';
 import { UserHelpers } from '@/users/helpers/users.helpers';
+import { RequestUserPayload } from '@/users/types';
 
 @Injectable()
 export class ArticleService {
@@ -18,9 +18,9 @@ export class ArticleService {
 
   async createArticle(
     article: ArticleCreateDto,
-    author: User,
+    author: RequestUserPayload,
   ): Promise<CreatedArticleDto> {
-    const user = await this.userHelpers.getUserById(author.id);
+    const user = await this.userHelpers.getUserById(author.userId);
 
     const createdArticle = await this.articleRepository.save({
       ...article,

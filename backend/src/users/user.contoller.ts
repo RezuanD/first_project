@@ -28,6 +28,7 @@ import { UserService } from '@/users/services/users.service';
 import { AvatarUploadDto } from '@/users/dto/avatar.dto';
 import { AvatarService } from '@/users/services/avatar.service';
 import { User } from '@/users/user.entity';
+import { RequestUserPayload } from '@/users/types';
 
 @Controller('users')
 @ApiTags('users')
@@ -54,8 +55,8 @@ export class UserController {
   @Delete()
   @ApiOkResponse({ status: 204, description: 'User successfully deleted' })
   @JwtAuthGuard()
-  async deleteUser(@UserPayload() user: User) {
-    if (await this.usersService.deleteUser(user.id)) {
+  async deleteUser(@UserPayload() user: RequestUserPayload) {
+    if (await this.usersService.deleteUser(user.userId)) {
       return { message: 'User deleted successfully' };
     }
   }
@@ -81,7 +82,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor('file'))
   async updateAvatar(
     @UploadedFile() file: Express.Multer.File,
-    @UserPayload() user: User,
+    @UserPayload() user: RequestUserPayload,
   ): Promise<{ imagePath: string }> {
     const imagePath = await this.avatarServices.saveAvatar(user.username, file);
 
