@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { TokensType } from '@/auth/types';
 import { AuthHelpers } from '@/auth/auth.helper';
 import { User } from '@/users/user.entity';
@@ -9,8 +7,6 @@ import { UserHelpers } from '@/users/helpers/users.helpers';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
     private readonly userHelpers: UserHelpers,
     private readonly authHelpers: AuthHelpers,
   ) {}
