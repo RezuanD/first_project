@@ -7,7 +7,7 @@ export class ArticleCreateDto extends PickType(Article, ['title', 'text']) {}
 
 class ArticleAuthorDto extends PickType(User, ['id', 'username']) {}
 
-export class ArticleCreatedDto extends PickType(Article, [
+export class CreatedArticleDto extends PickType(Article, [
   'id',
   'title',
   'text',
