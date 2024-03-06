@@ -1,15 +1,24 @@
-import { Controller, Get, Post, Patch, Delete } from '@nestjs/common';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Patch, Delete } from '@nestjs/common';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { UserPayload } from '@/auth/decorators';
 import { ArticleService } from '@/blog/article.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ArticleCreateDto, ArticleCreatedDto } from '@/blog/dto/article.dto';
+import { User } from '@/users/user.entity';
 
-@Controller('blog')
-@ApiTags('blog')
+@Controller('blog/articles')
+@ApiTags('articles')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post()
-  create() {
-    return this.articleService.create();
+  @ApiCreatedResponse({ type: ArticleCreatedDto })
+  @JwtAuthGuard()
+  async createArticle(
+    @UserPayload() author: User,
+    @Body() articleCreateDto: ArticleCreateDto,
+  ) {
+    return this.articleService.createArticle(articleCreateDto, author);
   }
 
   @Get()
