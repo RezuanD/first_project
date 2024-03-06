@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Article } from '@/blog/entities/article.entity';
-import { ArticleCreateDto, ArticleCreatedDto } from '@/blog/dto/article.dto';
+import { ArticleCreateDto, CreatedArticleDto } from '@/blog/dto/article.dto';
+import { ArticleHelpers } from '@/blog/article.helpers';
 import { User } from '@/users/user.entity';
 import { UserHelpers } from '@/users/helpers/users.helpers';
 
@@ -12,12 +13,13 @@ export class ArticleService {
     @InjectRepository(Article)
     private readonly articleRepository: Repository<Article>,
     private readonly userHelpers: UserHelpers,
+    private readonly articleHelpers: ArticleHelpers,
   ) {}
 
   async createArticle(
     article: ArticleCreateDto,
     author: User,
-  ): Promise<ArticleCreatedDto> {
+  ): Promise<CreatedArticleDto> {
     const user = await this.userHelpers.getUserById(author.id);
 
     const createdArticle = await this.articleRepository.save({
@@ -25,13 +27,8 @@ export class ArticleService {
       author: user,
     });
 
-    const filteredArticle = {
-      ...createdArticle,
-      author: {
-        username: createdArticle.author.username,
-        id: createdArticle.author.id,
-      },
-    };
+    const filteredArticle =
+      await this.articleHelpers.convertToArticleCreated(createdArticle);
 
     return filteredArticle;
   }
@@ -40,8 +37,16 @@ export class ArticleService {
     return ``;
   }
 
-  findOne() {
-    return ``;
+  async findArticle(id: string) {
+    const foundArticle = await this.articleRepository.findOne({
+      where: { id: id },
+      relations: ['author'],
+    });
+
+    const filteredArticle =
+      await this.articleHelpers.convertToArticleCreated(foundArticle);
+
+    return filteredArticle;
   }
 
   update() {
