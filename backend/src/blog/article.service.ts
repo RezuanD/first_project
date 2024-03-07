@@ -40,7 +40,7 @@ export class ArticleService {
   }
 
   async findArticle(id: string): Promise<Article> {
-    return await this.articleRepository.findOneBy({ id });
+    return this.articleRepository.findOneBy({ id });
   }
 
   async updateArticle(
@@ -48,7 +48,7 @@ export class ArticleService {
     userId: string,
     articleUpdateDto: UpdateArticleDto,
   ): Promise<Article> {
-    if (Object.keys(articleUpdateDto).length < 1) {
+    if (!Object.keys(articleUpdateDto).length) {
       throw new UnprocessableEntityException(
         'At least one field must be presented',
       );
@@ -72,9 +72,7 @@ export class ArticleService {
       foundArticle[fieldName] = articleUpdateDto[fieldName];
     }
 
-    const savedArticle = await foundArticle.save();
-
-    return savedArticle;
+    return foundArticle.save();
   }
 
   async removeArticle(articleId: string, userId: string): Promise<boolean> {
