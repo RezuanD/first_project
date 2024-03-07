@@ -7,6 +7,7 @@ import { RefreshTokenGuard } from '@/auth/guards/refresh-jwt-auth.guard';
 import { AccessTokenDto, LoginDto, RefreshTokenDto } from '@/auth/auth.dto';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserPayload } from '@/auth/decorators';
+import { MessageDto } from '@/common/dto/message.dto';
 import { Config } from '@/config/config';
 import { RequestUserPayload } from '@/users/types';
 import { User } from '@/users/user.entity';
@@ -59,6 +60,7 @@ export class AuthController {
 
   @ApiCreatedResponse({
     description: 'Refresh token successfully deleted',
+    type: MessageDto,
   })
   @JwtAuthGuard()
   @Post('logout')

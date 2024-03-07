@@ -1,4 +1,9 @@
-import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -13,6 +18,7 @@ import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserPayload } from '@/auth/decorators';
 import { ArticleService } from '@/blog/article.service';
 import { ArticleCreateDto, CreatedArticleDto } from '@/blog/dto/article.dto';
+import { MessageDto } from '@/common/dto/message.dto';
 import { RequestUserPayload } from '@/users/types';
 
 @Controller('blog/articles')
@@ -49,6 +55,7 @@ export class ArticleController {
   }
 
   @Delete(':id')
+  @ApiOkResponse({ type: MessageDto })
   @JwtAuthGuard()
   async removeArticle(
     @UserPayload() userPyaload: RequestUserPayload,
