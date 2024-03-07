@@ -39,7 +39,7 @@ export class ArticleService {
     return restArticle;
   }
 
-  findAll() {
+  async findAll() {
     return ``;
   }
 
@@ -56,7 +56,7 @@ export class ArticleService {
     articleId: string,
     userId: string,
     articleUpdateDto: UpdateArticleDto,
-  ) {
+  ): Promise<Article> {
     if (Object.keys(articleUpdateDto).length < 1) {
       throw new UnprocessableEntityException(
         'At least one field must be presented',
