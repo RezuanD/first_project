@@ -48,8 +48,18 @@ export class ArticleController {
     return this.articleService.update();
   }
 
-  @Delete()
-  remove() {
-    return this.articleService.remove();
+  @Delete(':id')
+  @JwtAuthGuard()
+  async removeArticle(
+    @UserPayload() userPyaload: RequestUserPayload,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) articleId: string,
+  ) {
+    const isArticleDeleted = await this.articleService.removeArticle(
+      articleId,
+      userPyaload.userId,
+    );
+    if (isArticleDeleted) {
+      return { message: 'Article deleted successully' };
+    }
   }
 }
