@@ -38,7 +38,7 @@ export class ArticleController {
     @UserPayload() author: RequestUserPayload,
     @Body() articleCreateDto: ArticleCreateDto,
   ) {
-    return this.articleService.createArticle(articleCreateDto, author);
+    return this.articleService.createArticle(articleCreateDto, author.userId);
   }
 
   @Get(':id')

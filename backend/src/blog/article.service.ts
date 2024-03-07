@@ -13,7 +13,6 @@ import {
   UpdateArticleDto,
 } from '@/blog/dto/article.dto';
 import { UserHelpers } from '@/users/helpers/users.helpers';
-import { RequestUserPayload } from '@/users/types';
 
 @Injectable()
 export class ArticleService {
@@ -25,9 +24,9 @@ export class ArticleService {
 
   async createArticle(
     article: ArticleCreateDto,
-    articleAuthor: RequestUserPayload,
+    authorId: string,
   ): Promise<CreatedArticleDto> {
-    const user = await this.userHelpers.getUserById(articleAuthor.userId);
+    const user = await this.userHelpers.getUserById(authorId);
 
     const createdArticle = await this.articleRepository.save({
       ...article,
