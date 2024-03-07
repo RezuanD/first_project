@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Article } from '@/blog/entities/article.entity';
@@ -54,12 +58,22 @@ export class ArticleService {
   }
 
   async removeArticle(articleId: string, userId: string): Promise<boolean> {
-    const foundArticle = await this.articleRepository.findOneBy({ id: articleId });
+    const foundArticle = await this.articleRepository.findOneBy({
+      id: articleId,
+    });
 
-    if (!foundArticle.authorId === userId) {
+    if (!foundArticle) {
+      throw new NotFoundException('Article not found');
+    }
+
+    if (foundArticle.authorId !== userId) {
       throw new ForbiddenException(
         `User doesn't have rights to delete article`,
+      );
     }
-    
+
+    await foundArticle.remove();
+
+    return true;
   }
 }
