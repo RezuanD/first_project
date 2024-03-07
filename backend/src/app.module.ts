@@ -6,6 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from '@/app.controller';
 import { AppService } from '@/app.service';
 import { AuthModule } from '@/auth/auth.module';
+import { BlogModule } from '@/blog/blog.module';
 import { TypeOrmConfigService } from '@/config/database.config';
 import { UserModule } from '@/users/users.module';
 
@@ -21,6 +22,7 @@ import { UserModule } from '@/users/users.module';
     }),
     UserModule,
     AuthModule,
+    BlogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

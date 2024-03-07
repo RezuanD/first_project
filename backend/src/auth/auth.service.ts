@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { TokensType } from '@/auth/types';
 import { AuthHelpers } from '@/auth/auth.helper';
-import { User } from '@/users/user.entity';
 import { UserHelpers } from '@/users/helpers/users.helpers';
+import { RequestUserPayload } from '@/users/types';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
     private readonly userHelpers: UserHelpers,
     private readonly authHelpers: AuthHelpers,
   ) {}
@@ -31,16 +27,16 @@ export class AuthService {
     return result;
   }
 
-  async login(user: User): Promise<TokensType> {
-    const payload = { username: user.username, sub: user.id };
+  async login(user: RequestUserPayload): Promise<TokensType> {
+    const payload = { username: user.username, sub: user.userId };
 
     return this.authHelpers.generateTokens(payload);
   }
 
-  async refreshToken(user: User): Promise<TokensType> {
+  async refreshToken(user: RequestUserPayload): Promise<TokensType> {
     const payload = {
       username: user.username,
-      sub: user.id,
+      sub: user.userId,
     };
 
     return this.authHelpers.generateTokens(payload);
