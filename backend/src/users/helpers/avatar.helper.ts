@@ -15,7 +15,6 @@ export class AvatarHelpers {
       await fs.promises.mkdir(directoryPath, { recursive: true });
       await fs.promises.writeFile(path, buffer);
     } catch (error) {
-      console.log(error);
       throw new Error('Failed to save file');
     }
   }
