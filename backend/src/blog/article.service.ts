@@ -7,11 +7,13 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Article } from '@/blog/entities/article.entity';
-import { ArticleCreateDto, CreatedArticleDto, UpdateArticleDto } from '@/blog/dto/article.dto';
-import { ArticleHelpers } from '@/blog/article.helpers';
+import {
+  ArticleCreateDto,
+  CreatedArticleDto,
+  UpdateArticleDto,
+} from '@/blog/dto/article.dto';
 import { UserHelpers } from '@/users/helpers/users.helpers';
 import { RequestUserPayload } from '@/users/types';
-import { filter } from 'rxjs';
 
 @Injectable()
 export class ArticleService {
@@ -19,24 +21,22 @@ export class ArticleService {
     @InjectRepository(Article)
     private readonly articleRepository: Repository<Article>,
     private readonly userHelpers: UserHelpers,
-    private readonly articleHelpers: ArticleHelpers,
   ) {}
 
   async createArticle(
     article: ArticleCreateDto,
-    author: RequestUserPayload,
+    articleAuthor: RequestUserPayload,
   ): Promise<CreatedArticleDto> {
-    const user = await this.userHelpers.getUserById(author.userId);
+    const user = await this.userHelpers.getUserById(articleAuthor.userId);
 
     const createdArticle = await this.articleRepository.save({
       ...article,
       author: user,
     });
 
-    const filteredArticle =
-      await this.articleHelpers.convertToArticleCreated(createdArticle);
+    const { author, ...restArticle } = createdArticle;
 
-    return filteredArticle;
+    return restArticle;
   }
 
   findAll() {
@@ -49,10 +49,7 @@ export class ArticleService {
       relations: ['author'],
     });
 
-    const filteredArticle =
-      await this.articleHelpers.convertToArticleCreated(foundArticle);
-
-    return filteredArticle;
+    return foundArticle;
   }
 
   async updateArticle(
@@ -86,10 +83,7 @@ export class ArticleService {
 
     const savedArticle = await foundArticle.save();
 
-    const filteredArticle =
-      await this.articleHelpers.convertToArticleCreated(savedArticle);
-
-    return filteredArticle;
+    return savedArticle;
   }
 
   async removeArticle(articleId: string, userId: string): Promise<boolean> {
