@@ -39,13 +39,8 @@ export class ArticleService {
     return restArticle;
   }
 
-  async findArticle(id: string) {
-    const foundArticle = await this.articleRepository.findOne({
-      where: { id: id },
-      relations: ['author'],
-    });
-
-    return foundArticle;
+  async findArticle(id: string): Promise<Article> {
+    return await this.articleRepository.findOneBy({ id });
   }
 
   async updateArticle(
