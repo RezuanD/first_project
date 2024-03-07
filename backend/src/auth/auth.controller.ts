@@ -8,7 +8,7 @@ import { AccessTokenDto, LoginDto, RefreshTokenDto } from '@/auth/auth.dto';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserPayload } from '@/auth/decorators';
 import { Config } from '@/config/config';
-import { User } from '@/users/user.entity';
+import { RequestUserPayload } from '@/users/types';
 
 @Controller('auth')
 export class AuthController {
@@ -20,7 +20,7 @@ export class AuthController {
   @Post('login')
   @LocalAuthGuard()
   async login(
-    @UserPayload() user: User,
+    @UserPayload() user: RequestUserPayload,
     @Res({ passthrough: true }) response: Response,
     @Body() loginDto: LoginDto
   ) {
@@ -41,7 +41,7 @@ export class AuthController {
   @RefreshTokenGuard()
   @Post('refresh')
   async refreshToken(
-    @UserPayload() user: User,
+    @UserPayload() user: RequestUserPayload,
     @Res({ passthrough: true }) response: Response,
     @Body() refresh_token: RefreshTokenDto,
   ) {
