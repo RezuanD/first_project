@@ -58,12 +58,12 @@ export class ArticleController {
   @ApiOkResponse({ type: MessageDto })
   @JwtAuthGuard()
   async removeArticle(
-    @UserPayload() userPyaload: RequestUserPayload,
+    @UserPayload() userPayload: RequestUserPayload,
     @Param('id', new ParseUUIDPipe({ version: '4' })) articleId: string,
   ) {
     const isArticleDeleted = await this.articleService.removeArticle(
       articleId,
-      userPyaload.userId,
+      userPayload.userId,
     );
     if (isArticleDeleted) {
       return { message: 'Article deleted successully' };
