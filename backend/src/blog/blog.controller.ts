@@ -1,6 +1,5 @@
 import {
   ApiCreatedResponse,
-  ApiOkResponse,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -55,7 +54,7 @@ export class ArticleController {
   }
 
   @Delete(':id')
-  @ApiOkResponse({ type: MessageDto })
+  @ApiCreatedResponse({ type: MessageDto })
   @JwtAuthGuard()
   async removeArticle(
     @UserPayload() userPayload: RequestUserPayload,
