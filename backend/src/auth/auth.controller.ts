@@ -4,9 +4,9 @@ import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { AuthService } from '@/auth/auth.service';
 import { LocalAuthGuard } from '@/auth/guards/local-auth.guard';
 import { RefreshTokenGuard } from '@/auth/guards/refresh-jwt-auth.guard';
-import { AccessTokenDto, LoginDto, RefreshTokenDto } from '@/auth/auth.dto';
+import { AccessTokenDto, LoginDto } from '@/auth/auth.dto';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
-import { UserPayload } from '@/auth/decorators';
+import { UserLocal, UserPayload } from '@/auth/decorators';
 import { MessageDto } from '@/common/dto/message.dto';
 import { Config } from '@/config/config';
 import { RequestUserPayload } from '@/users/types';
@@ -22,7 +22,7 @@ export class AuthController {
   @Post('login')
   @LocalAuthGuard()
   async login(
-    @UserPayload() user: User,
+    @UserLocal() user: User,
     @Res({ passthrough: true }) response: Response,
     @Body() loginDto: LoginDto
   ) {
@@ -45,7 +45,6 @@ export class AuthController {
   async refreshToken(
     @UserPayload() user: RequestUserPayload,
     @Res({ passthrough: true }) response: Response,
-    @Body() refresh_token: RefreshTokenDto,
   ) {
     const tokens = await this.authService.refreshToken(user);
 

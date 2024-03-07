@@ -29,7 +29,7 @@ export class AuthService {
   }
 
   async login(user: User): Promise<TokensType> {
-    const payload = { username: user.username, sub: user.id };
+    const payload = { username: user.username, userId: user.id };
 
     return this.authHelpers.generateTokens(payload);
   }
@@ -37,7 +37,7 @@ export class AuthService {
   async refreshToken(user: RequestUserPayload): Promise<TokensType> {
     const payload = {
       username: user.username,
-      sub: user.userId,
+      userId: user.userId,
     };
 
     return this.authHelpers.generateTokens(payload);

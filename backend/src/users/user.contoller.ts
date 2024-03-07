@@ -27,7 +27,6 @@ import {
 import { UserService } from '@/users/services/users.service';
 import { AvatarUploadDto } from '@/users/dto/avatar.dto';
 import { AvatarService } from '@/users/services/avatar.service';
-import { User } from '@/users/user.entity';
 import { RequestUserPayload } from '@/users/types';
 import { MessageDto } from '@/common/dto/message.dto';
 
@@ -66,10 +65,10 @@ export class UserController {
   @ApiOkResponse({ type: CreatedUser })
   @JwtAuthGuard()
   async updateUser(
-    @UserPayload() user: User,
+    @UserPayload() userPayload: RequestUserPayload,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.updateUser(user.id, updateUserDto);
+    return this.usersService.updateUser(userPayload.userId, updateUserDto);
   }
 
   @Put('/avatar')

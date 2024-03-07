@@ -8,5 +8,5 @@ export class TokensType extends AccessTokenType {
 
 export class PayloadType {
   username: string;
-  sub: string;
+  userId: string;
 }
