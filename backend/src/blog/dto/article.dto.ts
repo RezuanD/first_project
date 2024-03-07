@@ -25,3 +25,5 @@ export class CreatedArticleDto extends PickType(Article, [
   @ApiProperty()
   author: ArticleAuthorDto;
 }
+
+export class UpdateArticleDto extends PickType(Article, ['title', 'text']) {}

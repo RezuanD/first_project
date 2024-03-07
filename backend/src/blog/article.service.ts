@@ -2,14 +2,16 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Article } from '@/blog/entities/article.entity';
-import { ArticleCreateDto, CreatedArticleDto } from '@/blog/dto/article.dto';
+import { ArticleCreateDto, CreatedArticleDto, UpdateArticleDto } from '@/blog/dto/article.dto';
 import { ArticleHelpers } from '@/blog/article.helpers';
 import { UserHelpers } from '@/users/helpers/users.helpers';
 import { RequestUserPayload } from '@/users/types';
+import { filter } from 'rxjs';
 
 @Injectable()
 export class ArticleService {
@@ -53,8 +55,41 @@ export class ArticleService {
     return filteredArticle;
   }
 
-  update() {
-    return ``;
+  async updateArticle(
+    articleId: string,
+    userId: string,
+    articleUpdateDto: UpdateArticleDto,
+  ) {
+    if (Object.keys(articleUpdateDto).length < 1) {
+      throw new UnprocessableEntityException(
+        'At least one field must be presented',
+      );
+    }
+
+    const foundArticle = await this.articleRepository.findOneBy({
+      id: articleId,
+    });
+
+    if (!foundArticle) {
+      throw new NotFoundException('Article not found');
+    }
+
+    if (foundArticle.authorId !== userId) {
+      throw new ForbiddenException(
+        `User doesn't have rights to edit this article`,
+      );
+    }
+
+    for (const fieldName of Object.keys(articleUpdateDto)) {
+      foundArticle[fieldName] = articleUpdateDto[fieldName];
+    }
+
+    const savedArticle = await foundArticle.save();
+
+    const filteredArticle =
+      await this.articleHelpers.convertToArticleCreated(savedArticle);
+
+    return filteredArticle;
   }
 
   async removeArticle(articleId: string, userId: string): Promise<boolean> {
