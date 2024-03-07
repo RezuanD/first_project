@@ -13,12 +13,6 @@ export class LoginDto extends PickType(User, ['username']) {
   password: string;
 }
 
-export class RefreshTokenDto {
-  @ApiProperty()
-  @IsString()
-  refresh_token: string;
-}
-
 export class AccessTokenDto {
   @ApiProperty()
   @IsString()

@@ -27,8 +27,8 @@ import {
 import { UserService } from '@/users/services/users.service';
 import { AvatarUploadDto } from '@/users/dto/avatar.dto';
 import { AvatarService } from '@/users/services/avatar.service';
-import { User } from '@/users/user.entity';
 import { RequestUserPayload } from '@/users/types';
+import { MessageDto } from '@/common/dto/message.dto';
 
 @Controller('users')
 @ApiTags('users')
@@ -53,7 +53,7 @@ export class UserController {
   }
 
   @Delete()
-  @ApiOkResponse({ status: 204, description: 'User successfully deleted' })
+  @ApiOkResponse({ status: 204, type: MessageDto })
   @JwtAuthGuard()
   async deleteUser(@UserPayload() user: RequestUserPayload) {
     if (await this.usersService.deleteUser(user.userId)) {
@@ -65,10 +65,10 @@ export class UserController {
   @ApiOkResponse({ type: CreatedUser })
   @JwtAuthGuard()
   async updateUser(
-    @UserPayload() user: User,
+    @UserPayload() userPayload: RequestUserPayload,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.updateUser(user.id, updateUserDto);
+    return this.usersService.updateUser(userPayload.userId, updateUserDto);
   }
 
   @Put('/avatar')

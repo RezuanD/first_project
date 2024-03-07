@@ -19,7 +19,7 @@ export class RefreshJwtStrategy extends PassportStrategy(
   }
 
   async validate(payload: PayloadType) {
-    return { username: payload.username, sub: payload.sub };
+    return { username: payload.username, userId: payload.userId };
   }
 
   private static extractJWTFromCookie(req: Request): string | null {

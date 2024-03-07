@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '@/users/user.entity';
 import { UserHelpers } from '@/users/helpers/users.helpers';
 import { AvatarHelpers } from '@/users/helpers/avatar.helper';
 
 @Injectable()
 export class AvatarService {
   constructor(
-    @InjectRepository(User)
     private readonly userHelpers: UserHelpers,
     private readonly avatarHelpers: AvatarHelpers,
   ) {}
