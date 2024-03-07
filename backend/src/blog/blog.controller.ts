@@ -1,5 +1,6 @@
 import {
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -20,6 +21,7 @@ import {
   ArticleCreateDto,
   CreatedArticleDto,
   UpdateArticleDto,
+  UpdatedArticleDto,
 } from '@/blog/dto/article.dto';
 import { MessageDto } from '@/common/dto/message.dto';
 import { RequestUserPayload } from '@/users/types';
@@ -53,6 +55,8 @@ export class ArticleController {
   }
 
   @Patch(':id')
+  @ApiOkResponse({ type: UpdatedArticleDto })
+  @JwtAuthGuard()
   async updateArticle(
     @UserPayload() userPayload: RequestUserPayload,
     @Param('id', new ParseUUIDPipe({ version: '4' })) articleId: string,
