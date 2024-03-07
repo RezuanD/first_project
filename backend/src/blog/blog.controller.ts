@@ -61,11 +61,12 @@ export class ArticleController {
     @UserPayload() userPayload: RequestUserPayload,
     @Param('id', new ParseUUIDPipe({ version: '4' })) articleId: string,
   ) {
-    const isArticleDeleted = await this.articleService.removeArticle(
+    const deletedArticle = await this.articleService.removeArticle(
       articleId,
       userPayload.userId,
     );
-    if (isArticleDeleted) {
+
+    if (deletedArticle) {
       return { message: 'Article deleted successully' };
     }
   }
