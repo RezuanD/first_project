@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserPayload } from '@/auth/decorators';
 import { Config } from '@/config/config';
 import { RequestUserPayload } from '@/users/types';
+import { User } from '@/users/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -20,7 +21,7 @@ export class AuthController {
   @Post('login')
   @LocalAuthGuard()
   async login(
-    @UserPayload() user: RequestUserPayload,
+    @UserPayload() user: User,
     @Res({ passthrough: true }) response: Response,
     @Body() loginDto: LoginDto
   ) {

@@ -3,6 +3,7 @@ import { TokensType } from '@/auth/types';
 import { AuthHelpers } from '@/auth/auth.helper';
 import { UserHelpers } from '@/users/helpers/users.helpers';
 import { RequestUserPayload } from '@/users/types';
+import { User } from '@/users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -27,8 +28,8 @@ export class AuthService {
     return result;
   }
 
-  async login(user: RequestUserPayload): Promise<TokensType> {
-    const payload = { username: user.username, sub: user.userId };
+  async login(user: User): Promise<TokensType> {
+    const payload = { username: user.username, sub: user.id };
 
     return this.authHelpers.generateTokens(payload);
   }
