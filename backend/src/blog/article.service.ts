@@ -12,25 +12,21 @@ import {
   CreatedArticleDto,
   UpdateArticleDto,
 } from '@/blog/dto/article.dto';
-import { UserHelpers } from '@/users/helpers/users.helpers';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article)
     private readonly articleRepository: Repository<Article>,
-    private readonly userHelpers: UserHelpers,
   ) {}
 
   async createArticle(
     article: ArticleCreateDto,
     authorId: string,
   ): Promise<CreatedArticleDto> {
-    const user = await this.userHelpers.getUserById(authorId);
-
     const createdArticle = await this.articleRepository.save({
       ...article,
-      author: user,
+      authorId,
     });
 
     const { author, ...restArticle } = createdArticle;
@@ -39,7 +35,13 @@ export class ArticleService {
   }
 
   async findArticle(id: string): Promise<Article> {
-    return this.articleRepository.findOneBy({ id });
+    const foundArticle = await this.articleRepository.findOneBy({ id });
+
+    if (!foundArticle) {
+      throw new NotFoundException('Article not found');
+    }
+
+    return foundArticle;
   }
 
   async updateArticle(
