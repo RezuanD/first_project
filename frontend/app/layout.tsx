@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
+import { cn } from "../lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {};
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export default function RootLayout({
   children,
@@ -14,11 +14,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body data-theme="dark" className={inter.className}>
-        <div className="min-h-screen">
-          <Navbar />
-          {children}
-        </div>
+      <body
+        className={cn(
+          "min-h-screen flex flex-col bg-background font-sans antialiased",
+          fontSans.variable
+        )}>
+        {children}
       </body>
     </html>
   );
