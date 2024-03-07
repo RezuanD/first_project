@@ -39,10 +39,6 @@ export class ArticleService {
     return restArticle;
   }
 
-  async findAll() {
-    return ``;
-  }
-
   async findArticle(id: string) {
     const foundArticle = await this.articleRepository.findOne({
       where: { id: id },

@@ -41,11 +41,6 @@ export class ArticleController {
     return this.articleService.createArticle(articleCreateDto, author);
   }
 
-  @Get()
-  findAll() {
-    return this.articleService.findAll();
-  }
-
   @Get(':id')
   @ApiResponse({ type: CreatedArticleDto })
   async findArticle(
