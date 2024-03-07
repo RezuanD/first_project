@@ -1,18 +1,16 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsDate } from 'class-validator';
+import { IsDate, IsOptional, IsString } from 'class-validator';
 import { Article } from '@/blog/entities/article.entity';
-import { User } from '@/users/user.entity';
 
 export class ArticleCreateDto extends PickType(Article, ['title', 'text']) {}
 
-class ArticleAuthorDto extends PickType(User, ['id', 'username']) {}
-
-export class CreatedArticleDto extends PickType(Article, [
+class BaseArticleDto extends PickType(Article, [
   'id',
   'title',
   'text',
   'createdAt',
   'updatedAt',
+  'authorId',
 ]) {
   @ApiProperty()
   @IsDate()
@@ -21,7 +19,20 @@ export class CreatedArticleDto extends PickType(Article, [
   @ApiProperty()
   @IsDate()
   updatedAt: Date;
+}
+
+export class CreatedArticleDto extends BaseArticleDto {}
+
+export class UpdateArticleDto extends PickType(Article, ['title', 'text']) {
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  title: string;
 
   @ApiProperty()
-  author: ArticleAuthorDto;
+  @IsString()
+  @IsOptional()
+  text: string;
 }
+
+export class UpdatedArticleDto extends BaseArticleDto {}

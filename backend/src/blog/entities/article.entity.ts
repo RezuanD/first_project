@@ -35,5 +35,6 @@ export class Article extends ExtendedBaseEntity {
 
   @Column()
   @ApiProperty()
+  @IsUUID('4')
   authorId: string;
 }

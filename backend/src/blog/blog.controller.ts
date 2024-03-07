@@ -16,7 +16,12 @@ import {
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserPayload } from '@/auth/decorators';
 import { ArticleService } from '@/blog/article.service';
-import { ArticleCreateDto, CreatedArticleDto } from '@/blog/dto/article.dto';
+import {
+  ArticleCreateDto,
+  CreatedArticleDto,
+  UpdateArticleDto,
+  UpdatedArticleDto,
+} from '@/blog/dto/article.dto';
 import { MessageDto } from '@/common/dto/message.dto';
 import { RequestUserPayload } from '@/users/types';
 
@@ -32,12 +37,7 @@ export class ArticleController {
     @UserPayload() author: RequestUserPayload,
     @Body() articleCreateDto: ArticleCreateDto,
   ) {
-    return this.articleService.createArticle(articleCreateDto, author);
-  }
-
-  @Get()
-  findAll() {
-    return this.articleService.findAll();
+    return this.articleService.createArticle(articleCreateDto, author.userId);
   }
 
   @Get(':id')
@@ -48,9 +48,19 @@ export class ArticleController {
     return this.articleService.findArticle(articleId);
   }
 
-  @Patch()
-  update() {
-    return this.articleService.update();
+  @Patch(':id')
+  @ApiOkResponse({ type: UpdatedArticleDto })
+  @JwtAuthGuard()
+  async updateArticle(
+    @UserPayload() userPayload: RequestUserPayload,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) articleId: string,
+    @Body() articleUpdateDto: UpdateArticleDto,
+  ) {
+    return this.articleService.updateArticle(
+      articleId,
+      userPayload.userId,
+      articleUpdateDto,
+    );
   }
 
   @Delete(':id')

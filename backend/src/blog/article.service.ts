@@ -2,59 +2,78 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Article } from '@/blog/entities/article.entity';
-import { ArticleCreateDto, CreatedArticleDto } from '@/blog/dto/article.dto';
-import { ArticleHelpers } from '@/blog/article.helpers';
-import { UserHelpers } from '@/users/helpers/users.helpers';
-import { RequestUserPayload } from '@/users/types';
+import {
+  ArticleCreateDto,
+  CreatedArticleDto,
+  UpdateArticleDto,
+} from '@/blog/dto/article.dto';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article)
     private readonly articleRepository: Repository<Article>,
-    private readonly userHelpers: UserHelpers,
-    private readonly articleHelpers: ArticleHelpers,
   ) {}
 
   async createArticle(
     article: ArticleCreateDto,
-    author: RequestUserPayload,
+    authorId: string,
   ): Promise<CreatedArticleDto> {
-    const user = await this.userHelpers.getUserById(author.userId);
-
     const createdArticle = await this.articleRepository.save({
       ...article,
-      author: user,
+      authorId,
     });
 
-    const filteredArticle =
-      await this.articleHelpers.convertToArticleCreated(createdArticle);
+    const { author, ...restArticle } = createdArticle;
 
-    return filteredArticle;
+    return restArticle;
   }
 
-  findAll() {
-    return ``;
+  async findArticle(id: string): Promise<Article> {
+    const foundArticle = await this.articleRepository.findOneBy({ id });
+
+    if (!foundArticle) {
+      throw new NotFoundException('Article not found');
+    }
+
+    return foundArticle;
   }
 
-  async findArticle(id: string) {
-    const foundArticle = await this.articleRepository.findOne({
-      where: { id: id },
-      relations: ['author'],
+  async updateArticle(
+    articleId: string,
+    userId: string,
+    articleUpdateDto: UpdateArticleDto,
+  ): Promise<Article> {
+    if (!Object.keys(articleUpdateDto).length) {
+      throw new UnprocessableEntityException(
+        'At least one field must be presented',
+      );
+    }
+
+    const foundArticle = await this.articleRepository.findOneBy({
+      id: articleId,
     });
 
-    const filteredArticle =
-      await this.articleHelpers.convertToArticleCreated(foundArticle);
+    if (!foundArticle) {
+      throw new NotFoundException('Article not found');
+    }
 
-    return filteredArticle;
-  }
+    if (foundArticle.authorId !== userId) {
+      throw new ForbiddenException(
+        `User doesn't have rights to edit this article`,
+      );
+    }
 
-  update() {
-    return ``;
+    for (const fieldName of Object.keys(articleUpdateDto)) {
+      foundArticle[fieldName] = articleUpdateDto[fieldName];
+    }
+
+    return foundArticle.save();
   }
 
   async removeArticle(articleId: string, userId: string): Promise<boolean> {
