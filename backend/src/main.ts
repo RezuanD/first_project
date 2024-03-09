@@ -13,6 +13,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.use(cookieParser());
+  app.enableCors();
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle(config.getOrThrow('PROJECT_NAME'))
