@@ -10,15 +10,13 @@ export default function Navbar() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    const res = await fetch('http://127.0.0.1:8000/auth/logout', {
+    await fetch('http://127.0.0.1:8000/auth/logout', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
         'Content-Type': 'application/json'
       }
     });
-
-    console.log(res)
 
     localStorage.removeItem('access_token');
 

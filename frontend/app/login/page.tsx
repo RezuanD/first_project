@@ -15,10 +15,17 @@ import { Button } from "@/components/ui/button";
 import { loginFormSchema } from "../schemas/login.schema";
 import { useAuth } from "../auth.context";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function LoginPage() {
-  const { setIsLoggedIn } = useAuth();
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push("/");
+    }
+  }, [isLoggedIn, router])
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -37,16 +44,25 @@ export default function LoginPage() {
       }
     });
 
-    const data = await res.json();
+    if (res.status === 201) {
+      const data = await res.json();
 
-    localStorage.setItem('access_token', data.access_token);
-    setIsLoggedIn(true);
+      localStorage.setItem('access_token', data.access_token);
+      setIsLoggedIn(true);
 
-    router.push('/');
+      router.push('/');
+    } else if (res.status === 401) {
+      const invalidCreds = document.getElementById("invalidCreds");
+      
+      invalidCreds.classList.remove("hidden");
+    }
   };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <div id="invalidCreds" className="bg-red-500 text-white p-4 rounded-xl mb-2 hidden">
+        Your username or password invalid
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
